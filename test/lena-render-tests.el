@@ -109,6 +109,10 @@
                   (lena-test-faces text (string-search "n m" text))))
     (should (memq 'lena-render-diff-inserted
                   (lena-test-faces text (string-search "k :" text))))
+    ;; Behind the code's own faces, which keep their colors.
+    (should (memq 'lena-render-diff-inserted
+                  (memq 'lena-render-hyp-name
+                        (lena-test-faces text (string-search "k :" text)))))
     (should (eq (get-text-property (string-search "⊢" text) 'lena-goal text)
                 (get-text-property (string-search "n m" text) 'lena-goal text)))
     (should (equal (get-text-property 0 'outline-level text) 1))

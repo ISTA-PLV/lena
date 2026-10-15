@@ -564,15 +564,19 @@ left out.  Messages about the whole file come first."
                                seen -1)))))))))
 
 (defun lena-render--apply-faces ()
-  "Add the noted faces, then the diff faces of the rendered nodes."
+  "Add the noted faces, then the diff faces of the rendered nodes.
+The diff faces go behind the others, so that code keeps its colors:
+themes such as Doom's give `diff-added' a foreground, too."
   (pcase-dolist (`(,beg ,end ,face) (reverse lena-render--faces))
-    (add-face-text-property beg end face))
+    (add-face-text-property beg end face
+                            (memq face '(lena-render-diff-inserted
+                                         lena-render-diff-removed))))
   (dolist (node (and lena-render--diffs lena-render--nodes))
     (when-let* ((face (lena-render-diff-face
                        (lena-render-node-diff-status node))))
       (add-face-text-property (lena-render-node-beg node)
                               (lena-render-node-end node)
-                              face))))
+                              face t))))
 
 (defun lena-render--put-nodes ()
   "Store each rendered node in `lena-node' over its extent.
