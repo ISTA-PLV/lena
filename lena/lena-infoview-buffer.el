@@ -38,8 +38,10 @@
 (defconst lena-infoview-buffer-name "*Lena Infoview*")
 
 (defface lena-infoview-point-node
-  '((t :inherit highlight))
-  "Face of the subterm at point in the infoview."
+  '((t :underline t))
+  "Face of the subterm at point, while the infoview's window is selected.
+An underline keeps the colors of the subterm and the cursor visible in
+any theme."
   :group 'lena-infoview)
 
 ;;;; State:
@@ -213,6 +215,8 @@ buffer, and \\[xref-find-definitions] shows its definition in another window.
   (setq-local switch-to-buffer-obey-display-actions t)
   (add-hook 'post-command-hook #'lena-infoview--keep-window nil t)
   (add-hook 'post-command-hook #'lena-infoview--highlight-point nil t)
+  (add-hook 'window-selection-change-functions
+            #'lena-infoview--highlight-point nil t)
   (add-hook 'kill-buffer-hook #'lena-infoview--killed nil t))
 
 (defun lena-infoview--buffer ()
@@ -467,21 +471,25 @@ is as `lena-infoview--messages'."
       (when previous (lena-rpc-owner-release previous))))
   (lena-infoview--set-status nil))
 
-(defun lena-infoview--highlight-point ()
-  "Highlight the subterm at point in the infoview."
-  (if-let* ((node (lena-render-node-at (point))))
-      (if lena-infoview--point-overlay
-          (move-overlay lena-infoview--point-overlay
-                        (lena-render-node-beg node)
-                        (lena-render-node-end node))
-        (setq lena-infoview--point-overlay
-              (make-overlay (lena-render-node-beg node)
-                            (lena-render-node-end node)))
-        (overlay-put lena-infoview--point-overlay
-                     'face 'lena-infoview-point-node))
-    (when lena-infoview--point-overlay
-      (delete-overlay lena-infoview--point-overlay)
-      (setq lena-infoview--point-overlay nil))))
+(defun lena-infoview--highlight-point (&optional window)
+  "Highlight the subterm at point while the infoview's window is selected.
+Also run from `window-selection-change-functions', with the WINDOW
+whose selection changed, which shows the infoview."
+  (with-current-buffer (if window (window-buffer window) (current-buffer))
+    (if-let* (((eq (window-buffer) (current-buffer)))
+              (node (lena-render-node-at (point))))
+        (if lena-infoview--point-overlay
+            (move-overlay lena-infoview--point-overlay
+                          (lena-render-node-beg node)
+                          (lena-render-node-end node))
+          (setq lena-infoview--point-overlay
+                (make-overlay (lena-render-node-beg node)
+                              (lena-render-node-end node)))
+          (overlay-put lena-infoview--point-overlay
+                       'face 'lena-infoview-point-node))
+      (when lena-infoview--point-overlay
+        (delete-overlay lena-infoview--point-overlay)
+        (setq lena-infoview--point-overlay nil)))))
 
 ;;;; Messages:
 

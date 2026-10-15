@@ -252,6 +252,23 @@ That is what the goals look like after the next tactic."
     (lena-infoview--highlight-point)
     (should-not lena-infoview--point-overlay)))
 
+(ert-deftest lena-infoview-test-point-highlight-selected ()
+  "The subterm at point is highlighted only while the infoview is selected."
+  (lena-test-with-windows
+    (let ((infoview lena-infoview--window))
+      (lena-test-goto "IProp GF")
+      (lena-infoview--highlight-point)
+      (should lena-infoview--point-overlay)
+      ;; Another window is selected; the hook runs in its buffer.
+      (select-window (get-buffer-window "Main"))
+      (lena-infoview--highlight-point infoview)
+      (should-not (buffer-local-value 'lena-infoview--point-overlay
+                                      (window-buffer infoview)))
+      (select-window infoview)
+      (with-current-buffer "Main"
+        (lena-infoview--highlight-point infoview))
+      (should lena-infoview--point-overlay))))
+
 (ert-deftest lena-infoview-test-window-anchor ()
   "The window keeps its place in a goal when the goals are rendered again."
   (lena-test-with-goals
