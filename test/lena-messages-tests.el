@@ -230,6 +230,38 @@ Nat.add_comm (n m : Nat) : n + m = m + n
     (should (memq 'lena-render-trace-class
                   (lena-test-faces text (string-search "[a]" text))))))
 
+(defun lena-messages-test-multi-line-trace ()
+  "Return a message with a trace over three lines and a child over two."
+  (vector (lena-messages-test-message
+           (lena-messages-test-trace
+            "a" "one\n  more\n  most"
+            (list :strict
+                  (vector (lena-messages-test-trace "a.b" "inner\n  more"
+                                                    '(:strict []))))))))
+
+(ert-deftest lena-messages-test-multi-line-trace ()
+  "A trace over several lines is one heading, on its first line."
+  (let ((text (lena-render-result-text
+               (lena-messages-test-render (lena-messages-test-multi-line-trace)
+                                          3))))
+    (should (equal (substring-no-properties text)
+                   "Messages (1)\n4:2 error\n[a] one\n  more\n  most\n  [a.b] inner\n  more\n"))
+    (should (equal (cdr (lena-messages-test-headings text))
+                   '((2 2 (message 3 2 "error" 0) nil nil)
+                     (3 3 (message 3 2 "error" 0 0) nil nil)
+                     (6 4 (message 3 2 "error" 0 0 0) nil nil))))
+    ;; The key is the trace's on all its lines.
+    (should (equal (get-text-property (string-search "most" text) 'lena-key
+                                      text)
+                   '(message 3 2 "error" 0 0))))
+  (lena-messages-test-with-infoview (lena-messages-test-multi-line-trace) 3
+    ;; Folded from its first line, it hides the rest and its child.
+    (lena-test-goto "[a] one")
+    (outline-hide-subtree)
+    (should (lena-test-visible-p "[a] one"))
+    (dolist (string '("  more" "most" "inner"))
+      (should-not (lena-test-visible-p string)))))
+
 (ert-deftest lena-messages-test-suggestion ()
   "Lean's suggestions become text that knows what to replace."
   (let* ((text (lena-render-result-text

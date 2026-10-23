@@ -30,7 +30,8 @@
 ;; identifies it by its place so that state such as folding survives a
 ;; refresh: (case NAME . N) for the Nth goal named NAME, (goal . N) for
 ;; the Nth goal without a name, and `term-goal' for the expected type.
-;; Headings carry `outline-level'; section headings also carry
+;; Headings carry `outline-level' on their first line only, the line
+;; that Outline shows when they are folded; section headings also carry
 ;; `lena-section', `goals', `term-goal' or `messages'.
 ;;
 ;; Messages, the results of `Lean.Widget.getInteractiveDiagnostics',
@@ -41,8 +42,9 @@
 ;; heading of level 3 or deeper, with the key of the message followed
 ;; by the trace's path: its index among the traces of its parent, for
 ;; each enclosing trace.  Headings that a buffer should fold at first carry
-;; `lena-folded'.  The server sends the children of a trace on request
-;; only: its heading then carries `lena-trace-lazy', the reference for
+;; `lena-folded' on their first line.  The server sends the children of
+;; a trace on request only: its heading then carries `lena-trace-lazy',
+;; the reference for
 ;; `Lean.Widget.lazyTraceChildrenToInteractive'.  The position of a
 ;; message carries `lena-message-range', a suggestion to apply carries
 ;; `lena-suggestion', a link to the explanation of an error carries
@@ -172,6 +174,17 @@ Fontification would remove faces put on the text earlier.")
     (insert string)
     (push (list beg (point) face) lena-render--faces)))
 
+(defun lena-render--mark-heading (beg end level &optional props)
+  "Mark the text from BEG to END as a heading of LEVEL, with PROPS.
+Only its first line is marked: Outline takes each line that starts
+with the symbol `outline-level' as a property for a heading, and the
+lines after the first are the body of this one.  PROPS is a plist of
+more properties for the heading, such as `lena-folded'."
+  (add-text-properties beg (min end (save-excursion
+                                      (goto-char beg)
+                                      (line-end-position)))
+                       (append (list 'outline-level level) props)))
+
 (defun lena-render--code (tagged)
   "Insert TAGGED, a `CodeWithInfos', at point.
 Each tagged subterm becomes a node.  A node is noted after the nodes
@@ -262,8 +275,8 @@ see `lena-render-goals'."
   (let ((beg (point))
         (hyps (plist-get goal :hyps)))
     (when heading
-      (lena-render--insert (propertize heading 'outline-level 2)
-                           'lena-render-case)
+      (lena-render--insert heading 'lena-render-case)
+      (lena-render--mark-heading beg (point) 2)
       (when-let* ((diff (lena-render--flag-diff-face goal)))
         (push (list beg (point) diff) lena-render--faces))
       (insert "\n"))
@@ -281,8 +294,9 @@ see `lena-render-goals'."
 
 (defun lena-render--heading (text section)
   "Insert TEXT as the level 1 heading of SECTION, a symbol."
-  (lena-render--insert (propertize text 'outline-level 1 'lena-section section)
-                       'lena-render-heading)
+  (let ((beg (point)))
+    (lena-render--insert text 'lena-render-heading)
+    (lena-render--mark-heading beg (point) 1 (list 'lena-section section)))
   (insert "\n"))
 
 (defun lena-render--goals-section (goals options)
@@ -396,14 +410,17 @@ Children that the server sends on request only are taken from
     (lena-render--insert (format "[%s] " (plist-get trace :cls))
                          'lena-render-trace-class)
     (lena-render--msg (plist-get trace :msg))
-    ;; The heading is the trace's own line; its children follow.
-    (add-text-properties
-     beg (point)
-     (append (list 'outline-level (+ 3 lena-render--trace-depth) 'lena-key key)
-             (when (and kids (eq t (plist-get trace :collapsed)))
-               (list 'lena-folded t))
-             (when (and lazy (not fetched))
-               (list 'lena-trace-lazy lazy))))
+    ;; The heading is the first line of the trace's own text, which
+    ;; Lean may break into several; the rest and its children follow.
+    ;; Its key and the button to fetch its children cover all of it.
+    (add-text-properties beg (point)
+                         (append (list 'lena-key key)
+                                 (when (and lazy (not fetched))
+                                   (list 'lena-trace-lazy lazy))))
+    (lena-render--mark-heading
+     beg (point) (+ 3 lena-render--trace-depth)
+     (when (and kids (eq t (plist-get trace :collapsed)))
+       (list 'lena-folded t)))
     (insert "\n")
     (let ((lena-render--trace-key key)
           (lena-render--trace-count (list 0))
@@ -515,11 +532,11 @@ date gets a button to restart the file."
                         'lena-message-range range)
             " ")
     (lena-render--insert (car severity) (cdr severity))
-    (add-text-properties beg (point)
-                         (append (list 'outline-level 2 'lena-key key)
-                                 (unless (or whole-file
-                                             (eql (plist-get start :line) line))
-                                   (list 'lena-folded t))))
+    (put-text-property beg (point) 'lena-key key)
+    (lena-render--mark-heading beg (point) 2
+                               (unless (or whole-file
+                                           (eql (plist-get start :line) line))
+                                 (list 'lena-folded t)))
     (insert "\n")
     (let ((lena-render--trace-key key)
           (lena-render--trace-count (list 0))
