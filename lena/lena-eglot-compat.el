@@ -77,6 +77,13 @@ jsonrpc."
 Eglot keeps them for a document version.  It has them since 1.19."
   (setq eglot--semtok-state nil))
 
+(defvar eglot--docver)
+
+(defun lena-eglot-compat-semantic-tokens-current-p ()
+  "Return non-nil if Eglot has the semantic tokens of the current version.
+It may also have none, or those of an earlier version of the buffer."
+  (eq (plist-get eglot--semtok-state :docver) eglot--docver))
+
 (defun lena-eglot-compat-update-hints (from to)
   "Ask for the inlay hints between FROM and TO, and show them.
 Eglot asks for them only when it fontifies the text."

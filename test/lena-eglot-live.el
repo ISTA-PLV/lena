@@ -89,6 +89,44 @@ file was opened with imports out of date."
                    (lambda () (lena-eglot-live-semantic-lines)) 10)))
       (eglot-semantic-tokens-mode -1))))
 
+(ert-deftest lena-eglot-live-semantic-tokens-lost ()
+  "Once Lean has processed the file, Eglot asks again for lost semantic tokens.
+Here the request times out, as it can while Lean loads the imports of a
+file just opened, so its answer is lost."
+  (unless (fboundp 'eglot-semantic-tokens-mode)
+    (ert-skip "This Eglot does not show semantic tokens"))
+  (with-current-buffer (lena-rpc-live-buffer)
+    (unwind-protect
+        (progn
+          (eglot-semantic-tokens-mode 1)
+          (should (lena-rpc-live-wait
+                   (lambda () (lena-eglot-live-semantic-lines)) 10))
+          (goto-char (point-max))
+          (insert "\ntheorem u : 1 = 1 := rfl\n")
+          (lena-eglot-flush-changes)
+          (setq lena-eglot-file-progress nil)
+          (let ((jsonrpc-default-request-timeout 0.001))
+            (font-lock-ensure))
+          ;; Batch Emacs has no redisplay, so fontify again only where
+          ;; it would, after the buffer is flushed: fontifying anyway
+          ;; would ask for the tokens too.
+          (let (flushed)
+            (cl-letf* ((flush (symbol-function 'font-lock-flush))
+                       ((symbol-function 'font-lock-flush)
+                        (lambda (&rest args)
+                          (setq flushed t)
+                          (apply flush args))))
+              (should (lena-rpc-live-wait
+                       (lambda ()
+                         (when flushed
+                           (setq flushed nil)
+                           (font-lock-ensure))
+                         (and (lena-rpc-live-processed-p)
+                              (lena-eglot-compat-semantic-tokens-current-p)))
+                       60))))
+          (should (memq 7 (lena-eglot-live-semantic-lines))))
+      (eglot-semantic-tokens-mode -1))))
+
 (provide 'lena-eglot-live)
 
 ;;; lena-eglot-live.el ends here

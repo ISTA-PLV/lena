@@ -352,6 +352,8 @@ includes the silent diagnostics; see `lena-eglot-diagnostics'.")
                        (plist-get textDocument :uri))))
     (with-current-buffer buffer
       (setq lena-eglot-file-progress processing)
+      (when (seq-empty-p processing)
+        (lena-eglot-refresh-lost-semantic-tokens))
       (run-hook-with-args 'lena-eglot-file-progress-functions
                           processing))))
 
@@ -425,6 +427,13 @@ from the silent diagnostics in `lena-eglot-diagnostics'."
 ;; does Eglot know that `lena-eglot-restart-file' makes its tokens
 ;; outdated: the file is reopened with the same version.  Remove the
 ;; handler once Eglot asks again itself; the restart still needs this.
+;;
+;; Lean asks again only while its answer is incomplete, so an answer
+;; that is lost leaves the file without tokens until it is edited.  Eglot
+;; gives up on a request after `jsonrpc-default-request-timeout', which
+;; Lean can exceed while it loads the imports of a file just opened, and
+;; then often answers with all the tokens.  So once Lean has processed
+;; the file, Eglot is asked again if it lacks the tokens.
 
 (defun lena-eglot-refresh-semantic-tokens ()
   "Make Eglot ask for the semantic tokens of the current buffer again.
@@ -434,6 +443,14 @@ Only where Eglot shows them, with `eglot-semantic-tokens-mode'."
     (save-restriction
       (widen)
       (font-lock-flush))))
+
+(defun lena-eglot-refresh-lost-semantic-tokens ()
+  "Ask again for the semantic tokens of the current buffer if Eglot lacks them.
+That is, if it has none for the current version of the buffer, as when
+the answer to its request was lost."
+  (when (and (bound-and-true-p eglot-semantic-tokens-mode)
+             (not (lena-eglot-compat-semantic-tokens-current-p)))
+    (lena-eglot-refresh-semantic-tokens)))
 
 (cl-defmethod eglot-handle-request
   ((server lena-eglot-server) (_method (eql workspace/semanticTokens/refresh)))
