@@ -147,6 +147,10 @@ Infoview:
   out of date, are not, and come first. That message has a =[restart file]=
   button, which does what =C-c C-r= does. Their terms are subterms like those of
   goals. =RET= or =mouse-1= on the position of a message goes there in the source.
+- The messages of the whole file are in Flymake's list
+  (~flymake-show-buffer-diagnostics~), which also can be opened by clicking a
+  sign in the margin.
+- While Lean builds the imports, the infoview shows Lake's output.
 - Traces, as with =set_option trace.Meta.synthInstance true in=, are headings: =TAB=
   on one shows its children, which Lean sends on request only.
 - Suggestions such as Lean's "Try this" have an =[apply]= button that replaces the

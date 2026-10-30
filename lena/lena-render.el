@@ -481,11 +481,12 @@ replace, the `:suggestion' and the `:help' to show; links carry
                           (plist-get props :explanationUrl)))
       (_ (lena-render--msg (plist-get widget :alt))))))
 
-(defun lena-render--whole-file-p (diagnostic line-count)
+(defun lena-render-whole-file-p (diagnostic line-count)
   "Return non-nil if DIAGNOSTIC is about the whole file of LINE-COUNT lines.
 Lean gives messages about the file, such as that its imports are out of
-date, its first line as range and the whole file as full range, so that
-they are seen anywhere in it.  The same criterion as `lena-margin'."
+date or the output of Lake while it builds them, its first line as range
+and the whole file as full range, so that they are seen anywhere in it.
+The same criterion as `lena-margin'."
   (when-let* ((full (plist-get diagnostic :fullRange))
               ((natnump line-count)))
     (let ((start (plist-get full :start)))
@@ -559,8 +560,8 @@ left out.  Messages about the whole file come first."
                          (seq-contains-p (plist-get diagnostic :leanTags) 2))
                        (plist-get messages :diagnostics)))
          (whole-file (seq-filter (lambda (diagnostic)
-                                   (lena-render--whole-file-p diagnostic
-                                                              line-count))
+                                   (lena-render-whole-file-p diagnostic
+                                                             line-count))
                                  diagnostics))
          (lena-render--trace-children (plist-get messages :trace-children)))
     (when diagnostics

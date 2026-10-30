@@ -387,7 +387,79 @@ fails instead."
       (lena-infoview-test-answer)
       (with-current-buffer (lena-infoview--buffer)
         (should (eq lena-infoview--status 'processing))
-        (should-not lena-infoview--results)))))
+        (should-not lena-infoview--results)
+        (should lena-infoview--dim-cookie)))))
+
+(defun lena-infoview-test-file-diagnostic (message &rest keys)
+  "Return an LSP diagnostic with MESSAGE about the whole of a 3-line file.
+KEYS are added to it."
+  (append (list :range '(:start (:line 0 :character 0)
+                                :end (:line 1 :character 0))
+                :fullRange '(:start (:line 0 :character 0)
+                                    :end (:line 3 :character 0))
+                :severity 3 :message message)
+          keys))
+
+(defun lena-infoview-test-update-processing (source diagnostics)
+  "Update the infoview while the server processes SOURCE with DIAGNOSTICS.
+An update for line 2 was pending; return the owner of its references."
+  (let ((owner (nth 2 (car lena-infoview-test-calls)))
+        (lena-infoview--target (cons source 5)))
+    (with-current-buffer source
+      (setq-local lena-eglot-diagnostics diagnostics))
+    (setq lena-infoview-test-calls nil)
+    (cl-letf (((symbol-function 'lena-infoview-visible-p) #'always)
+              ((symbol-function 'eglot-managed-p) #'always)
+              ((symbol-function 'lena-infoview--rpc-supported-p) #'always)
+              ((symbol-function 'lena-eglot-processing-line-p) #'always))
+      (lena-infoview--update))
+    owner))
+
+(ert-deftest lena-infoview-test-processing-file-messages ()
+  "While the server processes, the messages about the whole file are shown.
+They are Lake's output while it builds the imports, undimmed and without
+goals; messages about lines and silent ones are left out."
+  (lena-infoview-test-with-pending-update
+    (let ((owner (lena-infoview-test-update-processing
+                  source
+                  (vector
+                   (lena-infoview-test-file-diagnostic
+                    "✔ [3/12] Built Speclang.Basic (1.2s)")
+                   (lena-infoview-test-file-diagnostic "Silent" :isSilent t)
+                   (list :range '(:start (:line 1 :character 0)
+                                         :end (:line 1 :character 1))
+                         :severity 1 :message "On a line")))))
+      (should (lena-rpc-owner-released owner))
+      (should-not lena-infoview-test-calls)
+      (with-current-buffer (lena-infoview--buffer)
+        (should (eq lena-infoview--status 'processing))
+        (should-not lena-infoview--dim-cookie)
+        (should (string-search "Messages (1)" (buffer-string)))
+        (should (string-search "✔ [3/12] Built Speclang.Basic (1.2s)"
+                               (buffer-string)))
+        (should-not (string-search "Silent" (buffer-string)))
+        (should-not (string-search "On a line" (buffer-string))))
+      ;; Once Lake is done, Lean clears its output and loads the
+      ;; imports: the output stays, dimmed.
+      (lena-infoview-test-update-processing source [])
+      (with-current-buffer (lena-infoview--buffer)
+        (should (eq lena-infoview--status 'processing))
+        (should lena-infoview--dim-cookie)
+        (should (string-search "✔ [3/12] Built Speclang.Basic (1.2s)"
+                               (buffer-string)))))))
+
+(ert-deftest lena-infoview-test-processing-imports-out-of-date ()
+  "A message that the imports are out of date keeps its restart button."
+  (lena-infoview-test-with-pending-update
+    (lena-infoview-test-update-processing
+     source
+     (vector (lena-infoview-test-file-diagnostic
+              "Imports are out of date and should be rebuilt; use the \
+\"Restart File\" command in your editor.")))
+    (with-current-buffer (lena-infoview--buffer)
+      (should (string-search "[restart file]" (buffer-string)))
+      (goto-char (point-min))
+      (should (text-property-search-forward 'lena-restart-file)))))
 
 ;;;; Windows:
 

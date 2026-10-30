@@ -254,6 +254,12 @@ out of date, are not, and come first. That message has a @samp{[restart file]}
 button, which does what @samp{C-c C-r} does. Their terms are subterms like those of
 goals. @samp{RET} or @samp{mouse-1} on the position of a message goes there in the source.
 @item
+The messages of the whole file are in Flymake's list
+(@code{flymake-show-buffer-diagnostics}), which also can be opened by clicking a
+sign in the margin.
+@item
+While Lean builds the imports, the infoview shows Lake's output.
+@item
 Traces, as with @samp{set_option trace.Meta.synthInstance true in}, are headings: @samp{TAB}
 on one shows its children, which Lean sends on request only.
 @item

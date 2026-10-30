@@ -25,11 +25,13 @@
 ;; Updates are throttled: the first one is immediate, then at most one
 ;; per `lena-infoview-delay'.  While the server is still processing the
 ;; line of point, no goals are requested; the infoview then shows its
-;; previous content, dimmed.  Goals, expected type and the messages of
-;; the line of point are requested together and shown together; an
-;; answer to a superseded request is never shown.  The previous content
-;; stays until the new one is ready, and its RPC references are released
-;; only then.
+;; previous content, dimmed.  If there are messages about the whole file,
+;; such as the output of Lake while it builds the imports, it shows them
+;; instead, as the infoviews of VS Code and lean.nvim do.  Goals,
+;; expected type and the messages of the line of point are requested
+;; together and shown together; an answer to a superseded request is
+;; never shown.  The previous content stays until the new one is ready,
+;; and its RPC references are released only then.
 ;;
 ;; Subterms in the infoview can be asked about, see
 ;; `lena-infoview-hover'.
@@ -129,6 +131,42 @@ Return nil if it is not, as far as the server has said."
                  (lena-margin-scale-emoji
                   (lena-margin-sign 'lena-margin-goals-accomplished))))))))
 
+(defun lena-infoview--line-count (buffer)
+  "Return the number of lines of BUFFER, ignoring narrowing."
+  (with-current-buffer buffer
+    (save-restriction
+      (widen)
+      (count-lines (point-min) (point-max)))))
+
+(defun lena-infoview--file-messages (line-count)
+  "Return the messages of the current buffer about the whole file.
+LINE-COUNT is the number of lines of the buffer.  These are the
+diagnostics that the server published last whose full range is the
+whole file, such as each line of Lake's output while it builds the
+imports, as `InteractiveDiagnostic's of plain text."
+  (seq-keep (lambda (diagnostic)
+              (and (not (eq (plist-get diagnostic :isSilent) t))
+                   (lena-render-whole-file-p diagnostic line-count)
+                   (plist-put (copy-sequence diagnostic) :message
+                              (list :text (plist-get diagnostic :message)))))
+            lena-eglot-diagnostics))
+
+(defun lena-infoview--show-file-messages (buffer pos messages line-count)
+  "Show MESSAGES about the whole file while the server processes POS.
+BUFFER is the source buffer, which has LINE-COUNT lines.  There are no
+goals to show with them, since a request for goals would only wait for
+the server."
+  (lena-infoview--show nil nil nil (lena-infoview--location buffer pos) nil nil
+                       (list :diagnostics messages
+                             :line (with-current-buffer buffer
+                                     (save-excursion
+                                       (goto-char pos)
+                                       (1- (line-number-at-pos nil t))))
+                             :line-count line-count
+                             :buffer buffer
+                             :tick (buffer-chars-modified-tick buffer)))
+  (lena-infoview--set-status 'processing 'current))
+
 (defun lena-infoview--request (buffer pos)
   "Request goals, expected type and messages at POS in BUFFER; show them.
 The messages are those of the line of POS.  If they cannot be had, the
@@ -140,10 +178,7 @@ goals are shown without them."
                 (save-excursion (goto-char pos)
                                 (1- (line-number-at-pos nil t)))))
         (tick (buffer-chars-modified-tick buffer))
-        (line-count (with-current-buffer buffer
-                      (save-restriction
-                        (widen)
-                        (count-lines (point-min) (point-max)))))
+        (line-count (lena-infoview--line-count buffer))
         (goals 'pending)
         (term-goal 'pending)
         (messages 'pending)
@@ -192,28 +227,38 @@ goals are shown without them."
 (defun lena-infoview--update (&optional force)
   "Update the infoview for `lena-infoview--target' now.
 While the server reports that it is processing the line of the target,
-show that instead of requesting goals, unless FORCE is non-nil.  A
-request made earlier would only wait on the server, so this is just to
-save work; when the server has not reported anything yet, request.
-An update that requests nothing drops the answers to an earlier one,
-which would no longer be about the target."
+show that instead of requesting goals, unless FORCE is non-nil, along
+with the messages about the whole file if there are any.  A request
+made earlier would only wait on the server, so this is just to save
+work; when the server has not reported anything yet, request.  An
+update that requests nothing drops the answers to an earlier one, which
+would no longer be about the target."
   (pcase-let ((`(,buffer . ,pos) lena-infoview--target))
     (when (and (buffer-live-p buffer) (lena-infoview-visible-p))
       (with-current-buffer buffer
         (setq lena-infoview--source buffer)
-        (let ((status
-               (cond
-                ((not (eglot-managed-p)) 'no-server)
-                ((not (lena-infoview--rpc-supported-p)) 'unsupported)
-                ((and (not force)
-                      (lena-eglot-processing-line-p
-                       (save-excursion (goto-char pos)
-                                       (1- (line-number-at-pos nil t)))))
-                 'processing))))
-          (if (not status)
-              (lena-infoview--request buffer pos)
-            (lena-infoview--abandon-pending)
-            (lena-infoview--set-status status)))))))
+        (let* ((status
+                (cond
+                 ((not (eglot-managed-p)) 'no-server)
+                 ((not (lena-infoview--rpc-supported-p)) 'unsupported)
+                 ((and (not force)
+                       (lena-eglot-processing-line-p
+                        (save-excursion (goto-char pos)
+                                        (1- (line-number-at-pos nil t)))))
+                  'processing)))
+               (line-count (and (eq status 'processing)
+                                (lena-infoview--line-count buffer)))
+               (messages (and line-count
+                              (lena-infoview--file-messages line-count))))
+          (cond ((not status)
+                 (lena-infoview--request buffer pos))
+                (messages
+                 (lena-infoview--abandon-pending)
+                 (lena-infoview--show-file-messages buffer pos messages
+                                                    line-count))
+                (t
+                 (lena-infoview--abandon-pending)
+                 (lena-infoview--set-status status))))))))
 
 (defun lena-infoview--cooldown-end ()
   "End the throttling period and run a deferred update, if any."

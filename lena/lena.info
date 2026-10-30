@@ -262,6 +262,10 @@ Language Server Protocol (LSP):
      what ‘C-c C-r’ does.  Their terms are subterms like those of goals.
      ‘RET’ or ‘mouse-1’ on the position of a message goes there in the
      source.
+   • The messages of the whole file are in Flymake's list
+     (‘flymake-show-buffer-diagnostics’), which also can be opened by
+     clicking a sign in the margin.
+   • While Lean builds the imports, the infoview shows Lake's output.
    • Traces, as with ‘set_option trace.Meta.synthInstance true in’, are
      headings: ‘TAB’ on one shows its children, which Lean sends on
      request only.
@@ -715,22 +719,22 @@ Node: Credits4372
 Node: What It Adds6093
 Node: Get Started8216
 Node: Usage8608
-Node: Configuration15335
-Node: Installation17497
-Node: Installation from Sources17951
-Node: Manual Installation18299
-Node: Installation via package-vc19256
-Ref: Installation via package-vc-selected-packages19919
-Ref: Installation via use-package vc21062
-Node: Installation in Doom Emacs21953
-Node: Changelog24521
-Node: Lena not released yet25015
-Node: Version 082 from 2026-02-2225349
-Node: Version 080 from 2026-12-1625739
-Node: Version 070 from 2025-12-1526384
-Node: Version 062 from 2025-11-3026983
-Node: Version 060 from 2025-11-3027336
-Node: License and Maintenance28434
+Node: Configuration15577
+Node: Installation17739
+Node: Installation from Sources18193
+Node: Manual Installation18541
+Node: Installation via package-vc19498
+Ref: Installation via package-vc-selected-packages20161
+Ref: Installation via use-package vc21304
+Node: Installation in Doom Emacs22195
+Node: Changelog24763
+Node: Lena not released yet25257
+Node: Version 082 from 2026-02-2225591
+Node: Version 080 from 2026-12-1625981
+Node: Version 070 from 2025-12-1526626
+Node: Version 062 from 2025-11-3027225
+Node: Version 060 from 2025-11-3027578
+Node: License and Maintenance28676
 
 End Tag Table
 

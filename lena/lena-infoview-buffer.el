@@ -253,12 +253,16 @@ processes such as compilations show their state."
      (`(error . ,message)
       (propertize " error" 'face 'error 'help-echo message)))))
 
-(defun lena-infoview--set-status (status)
-  "Set the STATUS of the infoview and dim its content if outdated."
+(defun lena-infoview--set-status (status &optional current)
+  "Set the STATUS of the infoview and dim its content if outdated.
+CURRENT non-nil says that the content was just shown for STATUS, such as
+the messages about the whole file while the server processes it, so
+that it is not outdated."
   (when-let* ((buffer (lena-infoview--buffer)))
     (with-current-buffer buffer
       (setq lena-infoview--status status)
-      (let ((dim (memq status '(processing no-server unsupported))))
+      (let ((dim (and (memq status '(processing no-server unsupported))
+                      (not current))))
         (cond ((and dim (not lena-infoview--dim-cookie))
                (setq lena-infoview--dim-cookie
                      (face-remap-add-relative 'default 'shadow)))

@@ -139,6 +139,59 @@ The buffer is current, and point is before `rw'."
           (should (lena-infoview-live-wait-for "⊢ b + 0 = 1")))
       (setq lena-eglot-file-progress []))))
 
+(ert-deftest lena-infoview-live-build-output ()
+  "While the imports are built, the infoview shows Lake's output.
+A file that the test file imports changes, and the file is restarted.
+Once Lean clears Lake's output and loads the imports, the output stays,
+dimmed.  Lean replaces Lake's last line within milliseconds, so the test
+notes what the infoview shows each time rather than looking now and
+then."
+  (with-current-buffer (lena-infoview-live-open)
+    (let* ((file (expand-file-name "Tiny/B.lean" lena-rpc-live-root))
+           (original (with-temp-buffer
+                       (insert-file-contents file)
+                       (buffer-string)))
+           (lena-infoview-delay 0)
+           shown)
+      (cl-letf* ((set-status (symbol-function 'lena-infoview--set-status))
+                 ((symbol-function 'lena-infoview--set-status)
+                  (lambda (&rest args)
+                    (apply set-status args)
+                    (push (list (lena-infoview-live-status)
+                                (and (buffer-local-value
+                                      'lena-infoview--dim-cookie
+                                      (lena-infoview--buffer))
+                                     t)
+                                (lena-infoview-live-text))
+                          shown))))
+        (unwind-protect
+            (progn
+              (with-temp-file file (insert original "\ndef c : Nat := 2\n"))
+              (setq lena-eglot-file-progress nil)
+              (lena-eglot-restart-file)
+              (should (lena-rpc-live-wait #'lena-rpc-live-processed-p 120))
+              (let ((built (member '(processing nil) ; Lake's output, current
+                                   (mapcar (lambda (each)
+                                             (if (string-search "Built Tiny.B"
+                                                                (nth 2 each))
+                                                 (butlast each)
+                                               'other))
+                                           (reverse shown)))))
+                (should built)
+                (should (member '(processing t) built))
+                (should (string-prefix-p
+                         "Messages (1)\n"
+                         (nth 2 (seq-find (lambda (each)
+                                            (string-search "Built Tiny.B"
+                                                           (nth 2 each)))
+                                          shown)))))
+              ;; Once Lean is done, the goals are back.
+              (should (lena-infoview-live-wait-for "⊢ n + 0 = 1")))
+          (with-temp-file file (insert original))
+          (setq lena-eglot-file-progress nil)
+          (lena-eglot-restart-file)
+          (lena-rpc-live-wait #'lena-rpc-live-processed-p 120))))))
+
 (ert-deftest lena-infoview-live-local-hooks ()
   "The infoview hooks into Lena buffers only, and leaves them when killed."
   (let ((buffer (lena-infoview-live-open)))
