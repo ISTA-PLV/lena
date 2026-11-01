@@ -1,6 +1,6 @@
 ;;; lena-eglot-compat.el --- Eglot internals used by Lena  -*- lexical-binding: t; -*-
 
-;; Copyright © 2026 Klaus Kraßnitzer
+;; Copyright (C) 2026 Klaus Kraßnitzer
 
 ;; SPDX-License-Identifier: GPL-3.0-only
 

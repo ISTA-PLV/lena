@@ -1,9 +1,9 @@
 ;;; lena-eglot.el --- Eglot for Lena  -*- lexical-binding: t; -*-
 
-;; Copyright © 2024 Free Software Foundation, Inc.
-;; Copyright © 2025 Mekeor Melire
-;; Copyright © 2026 Doug Torrance
-;; Copyright © 2026 Klaus Kraßnitzer
+;; Copyright (C) 2024 Free Software Foundation, Inc.
+;; Copyright (C) 2025 Mekeor Melire
+;; Copyright (C) 2026 Doug Torrance
+;; Copyright (C) 2026 Klaus Kraßnitzer
 
 ;; SPDX-License-Identifier: GPL-3.0-only
 
@@ -508,7 +508,7 @@ processing stopped with a fatal error do not count."
 
 ;; Adapted from `lean4-eglot.el' of lean4-mode
 ;; <https://github.com/d-torrance/lean4-mode> at commit 0c2216dd43,
-;; Copyright © 2026 Doug Torrance, licensed under the Apache License,
+;; Copyright (C) 2026 Doug Torrance, licensed under the Apache License,
 ;; Version 2.0.  Changed: names and docstrings; the server class; the
 ;; restart command checks `eglot-managed-p' instead of
 ;; `eglot-current-server'.

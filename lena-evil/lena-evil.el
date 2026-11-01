@@ -1,6 +1,6 @@
 ;;; lena-evil.el --- Evil bindings for Lena's infoview  -*- lexical-binding: t; -*-
 
-;; Copyright © 2026 Klaus Kraßnitzer
+;; Copyright (C) 2026 Klaus Kraßnitzer
 
 ;; Author: Klaus Kraßnitzer <klaus.krassnitzer@ista.ac.at>
 ;; Keywords: languages

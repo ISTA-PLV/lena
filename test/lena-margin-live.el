@@ -1,6 +1,6 @@
 ;;; lena-margin-live.el --- Tests for lena-margin against Lean  -*- lexical-binding: t; -*-
 
-;; Copyright © 2026 Klaus Kraßnitzer
+;; Copyright (C) 2026 Klaus Kraßnitzer
 
 ;; SPDX-License-Identifier: GPL-3.0-only
 

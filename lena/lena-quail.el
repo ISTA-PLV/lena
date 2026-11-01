@@ -1,6 +1,6 @@
 ;;; lena-quail.el --- Lena Input Method  -*- lexical-binding: t; -*-
 
-;; Copyright © 2026 Mekeor Melire
+;; Copyright (C) 2026 Mekeor Melire
 
 ;; SPDX-License-Identifier: GPL-3.0-only
 
