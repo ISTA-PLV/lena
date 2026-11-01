@@ -2,7 +2,7 @@
 
 * Reporting Problems
 
-Please report problems at [[https://github.com/ISTA-PLV/nael/issues][github.com/ISTA-PLV/nael/issues]]. Say which versions of
+Please report problems at [[https://github.com/ISTA-PLV/lena/issues][github.com/ISTA-PLV/lena/issues]]. Say which versions of
 Emacs and of Lean (the project's =lean-toolchain=) you use, and what =*Messages*=
 and =M-x eglot-events-buffer= show.
 

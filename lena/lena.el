@@ -31,7 +31,7 @@
 ;;             Alex Loitzl <alexander.loitzl@ista.ac.at>
 ;; Package-Requires: ((emacs "30.1"))
 ;; SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only AND MIT
-;; URL: https://github.com/ISTA-PLV/nael
+;; URL: https://github.com/ISTA-PLV/lena
 ;; Version: 0.8.3
 
 ;; This is licensed under GNU General Public License (version 3 only),
@@ -48,7 +48,7 @@
 ;; - After installation, as local Info manual per C-h i d lena RET or
 ;;   (info "(lena) Top")
 ;;
-;; - As HTML webpage at <https://github.com/ISTA-PLV/nael>.
+;; - As HTML webpage at <https://github.com/ISTA-PLV/lena>.
 
 ;;; Code:
 
@@ -71,7 +71,7 @@
   "Major mode for Lean."
   :group 'languages
   :link '(emacs-library-link :tag "Source Lisp File" "lena.el")
-  :link '(url-link :tag "Website" "https://github.com/ISTA-PLV/nael")
+  :link '(url-link :tag "Website" "https://github.com/ISTA-PLV/lena")
   :prefix "lena-"
   :tag "Lena")
 

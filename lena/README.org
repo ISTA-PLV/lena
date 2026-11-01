@@ -282,7 +282,7 @@ Lena to ~load-path~ and load it. For lazy loading the autoloads-file needs to be
 built beforehand.
 
 #+begin_src emacs-lisp
-;; git clone https://github.com/ISTA-PLV/nael.git ~/path/to/lena
+;; git clone https://github.com/ISTA-PLV/lena.git ~/path/to/lena
 
 (add-to-list 'load-path "~/path/to/lena/lena")
 ;; For Evil:
@@ -325,11 +325,11 @@ Lena, load the autoloads-file.
         '((lena
            :doc "lena/README.org"
            :lisp-dir "lena"
-           :url "https://github.com/ISTA-PLV/nael.git")
+           :url "https://github.com/ISTA-PLV/lena.git")
           ;; For Evil:
           ;; (lena-evil
           ;;  :lisp-dir "lena-evil"
-          ;;  :url "https://github.com/ISTA-PLV/nael.git")
+          ;;  :url "https://github.com/ISTA-PLV/lena.git")
           ))
 
 (package-initialize)
@@ -355,13 +355,13 @@ that is generated at installation, you don't need to specify load-triggers like
 (use-package lena
   :vc ( :doc "lena/README.org"
         :lisp-dir "lena"
-        :url "https://github.com/ISTA-PLV/nael.git"))
+        :url "https://github.com/ISTA-PLV/lena.git"))
 
 ;; For Evil:
 ;; (use-package lena-evil
 ;;   :after (lena evil)
 ;;   :vc ( :lisp-dir "lena-evil"
-;;         :url "https://github.com/ISTA-PLV/nael.git")
+;;         :url "https://github.com/ISTA-PLV/lena.git")
 ;;   :config (lena-evil-setup))
 #+end_src
 
@@ -373,12 +373,12 @@ Doom's own =:lang lean= module uses upstream Nael, so disable it: in
 
 #+begin_src emacs-lisp
 (package! lena
-  :recipe (:host github :repo "ISTA-PLV/nael"
+  :recipe (:host github :repo "ISTA-PLV/lena"
            :files ("lena/*.el" "lena/lena.info" "lena/lena.texi"
                    "lena/NOTICE" "lena/LICENSE*")))
 ;; With Evil:
 (package! lena-evil
-  :recipe (:host github :repo "ISTA-PLV/nael"
+  :recipe (:host github :repo "ISTA-PLV/lena"
            :files ("lena-evil/*.el" "lena-evil/LICENSE")))
 #+end_src
 
@@ -493,6 +493,6 @@ recorded from [[https://github.com/leanprover-community/iris-lean][iris-lean]], 
 =test/fixtures/README.org=.
 
 Lena is maintained by /Klaus Kraßnitzer/ and /Alex Loitzl/ of ISTA PLV at
-[[https://github.com/ISTA-PLV/nael][github.com/ISTA-PLV/nael]]; please report problems there.
+[[https://github.com/ISTA-PLV/lena][github.com/ISTA-PLV/lena]]; please report problems there.
 
 Nael, upstream, is maintained by /Mekeor Melire/ ([[mailto:mekeor@posteo.de][mekeor@posteo.de]]) on [[https://codeberg.org/mekeor/nael][Codeberg]].
