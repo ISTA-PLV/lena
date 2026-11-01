@@ -592,7 +592,7 @@ with the input method on, and \\[toggle-input-method] turns it off."
                (cons "lean" 'lena-mode)))
 
 ;; These pairs follow Doom Emacs' `:lang lean' module (Doom Emacs at
-;; commit f8329b4, Copyright (c) 2014-2026 Henrik Lissner, MIT License;
+;; commit 71522ea, Copyright (c) 2014-2026 Henrik Lissner, MIT License;
 ;; see <https://github.com/doomemacs/doomemacs/blob/master/LICENSE>).
 (with-eval-after-load 'smartparens
   (sp-local-pair 'lena-mode "/-" "-/")
