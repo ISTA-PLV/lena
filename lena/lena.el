@@ -28,7 +28,7 @@
 ;;         Yury G. Kudryashov <urkud@urkud.name>
 ;; Keywords: languages
 ;; Maintainer: Klaus Kraßnitzer <klaus.krassnitzer@ista.ac.at>
-;;             Alex Loitzl <alexander.loitzl@gmail.com>
+;;             Alex Loitzl <alexander.loitzl@ista.ac.at>
 ;; Package-Requires: ((emacs "30.1"))
 ;; SPDX-License-Identifier: Apache-2.0 AND GPL-3.0-only AND MIT
 ;; URL: https://github.com/ISTA-PLV/nael
