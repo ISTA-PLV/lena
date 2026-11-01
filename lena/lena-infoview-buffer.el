@@ -18,7 +18,6 @@
 
 (require 'cl-lib)
 (require 'eglot)
-(require 'face-remap)
 (require 'outline)
 (require 'transient)
 
@@ -148,8 +147,10 @@ user folds or unfolds it, it stays so while it is shown.")
 (defvar-local lena-infoview--point-overlay nil
   "Overlay that highlights the subterm at point.")
 
-(defvar-local lena-infoview--dim-cookie nil
-  "Face remapping that dims outdated content, or nil.")
+(defvar-local lena-infoview--dim-overlay nil
+  "Overlay that dims outdated content, or nil.
+An overlay's face goes over the faces of the text, such as those of
+code, which a remapping of `default' would leave as they are.")
 
 (defvar lena-infoview--window nil
   "The window in which `lena-infoview' displayed the infoview, or nil.")
@@ -263,12 +264,15 @@ that it is not outdated."
       (setq lena-infoview--status status)
       (let ((dim (and (memq status '(processing no-server unsupported))
                       (not current))))
-        (cond ((and dim (not lena-infoview--dim-cookie))
-               (setq lena-infoview--dim-cookie
-                     (face-remap-add-relative 'default 'shadow)))
-              ((and (not dim) lena-infoview--dim-cookie)
-               (face-remap-remove-relative lena-infoview--dim-cookie)
-               (setq lena-infoview--dim-cookie nil))))
+        (cond ((and dim (not lena-infoview--dim-overlay))
+               ;; It grows with the text inserted when the content is
+               ;; rendered again, as when view options change.
+               (setq lena-infoview--dim-overlay
+                     (make-overlay (point-min) (point-max) nil nil t))
+               (overlay-put lena-infoview--dim-overlay 'face 'shadow))
+              ((and (not dim) lena-infoview--dim-overlay)
+               (delete-overlay lena-infoview--dim-overlay)
+               (setq lena-infoview--dim-overlay nil))))
       (force-mode-line-update))))
 
 (defun lena-infoview--killed ()

@@ -103,13 +103,13 @@ The buffer is current, and point is before `rw'."
             (should (eq (lena-infoview-live-status) 'processing))
             (should (eq (alist-get 'infoview-goals lena-rpc--slots) request))
             (should (equal (lena-infoview-live-text) text))
-            (should (buffer-local-value 'lena-infoview--dim-cookie
+            (should (buffer-local-value 'lena-infoview--dim-overlay
                                         (lena-infoview--buffer))))
         ;; The server reports that processing ended.
         (setq lena-eglot-file-progress [])
         (run-hook-with-args 'lena-eglot-file-progress-functions []))
       (should (lena-infoview-live-wait-for "⊢ b + 0 = 1"))
-      (should-not (buffer-local-value 'lena-infoview--dim-cookie
+      (should-not (buffer-local-value 'lena-infoview--dim-overlay
                                       (lena-infoview--buffer))))))
 
 (ert-deftest lena-infoview-live-no-progress-yet ()
@@ -159,7 +159,7 @@ then."
                     (apply set-status args)
                     (push (list (lena-infoview-live-status)
                                 (and (buffer-local-value
-                                      'lena-infoview--dim-cookie
+                                      'lena-infoview--dim-overlay
                                       (lena-infoview--buffer))
                                      t)
                                 (lena-infoview-live-text))

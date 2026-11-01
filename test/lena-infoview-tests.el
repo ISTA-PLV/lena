@@ -57,6 +57,26 @@
                               (overlays-in (point-min) (point-max)))
                    1))))))
 
+(ert-deftest lena-infoview-test-dim ()
+  "Outdated content is dimmed, code included, even when rendered again."
+  (lena-test-with-goals
+    (cl-flet ((dimmed-p (pos)
+                (memq 'shadow (ensure-list (get-char-property pos 'face)))))
+      (let ((code (save-excursion
+                    (lena-test-goto "IProp GF")
+                    (prop-match-beginning
+                     (text-property-search-forward 'face)))))
+        (should (get-text-property code 'face))
+        (should-not (dimmed-p code))
+        (lena-infoview--set-status 'processing)
+        (should (dimmed-p code))
+        (should (dimmed-p (1- (point-max))))
+        (lena-infoview-toggle-types)
+        (should (dimmed-p (1- (point-max))))
+        (lena-infoview-toggle-types)
+        (lena-infoview--set-status nil)
+        (should-not (dimmed-p code))))))
+
 (ert-deftest lena-infoview-test-wrap ()
   "Long lines wrap in the infoview, even where Emacs truncates by default."
   (let ((default (default-value 'truncate-lines)))
@@ -388,7 +408,7 @@ fails instead."
       (with-current-buffer (lena-infoview--buffer)
         (should (eq lena-infoview--status 'processing))
         (should-not lena-infoview--results)
-        (should lena-infoview--dim-cookie)))))
+        (should lena-infoview--dim-overlay)))))
 
 (defun lena-infoview-test-file-diagnostic (message &rest keys)
   "Return an LSP diagnostic with MESSAGE about the whole of a 3-line file.
@@ -433,7 +453,7 @@ goals; messages about lines and silent ones are left out."
       (should-not lena-infoview-test-calls)
       (with-current-buffer (lena-infoview--buffer)
         (should (eq lena-infoview--status 'processing))
-        (should-not lena-infoview--dim-cookie)
+        (should-not lena-infoview--dim-overlay)
         (should (string-search "Messages (1)" (buffer-string)))
         (should (string-search "✔ [3/12] Built Speclang.Basic (1.2s)"
                                (buffer-string)))
@@ -444,7 +464,7 @@ goals; messages about lines and silent ones are left out."
       (lena-infoview-test-update-processing source [])
       (with-current-buffer (lena-infoview--buffer)
         (should (eq lena-infoview--status 'processing))
-        (should lena-infoview--dim-cookie)
+        (should lena-infoview--dim-overlay)
         (should (string-search "✔ [3/12] Built Speclang.Basic (1.2s)"
                                (buffer-string)))))))
 
