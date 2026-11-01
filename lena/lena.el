@@ -578,6 +578,7 @@ with the input method on, and \\[toggle-input-method] turns it off."
   (add-to-list 'projectile-project-root-files-bottom-up "lakefile.lean")
   (add-to-list 'projectile-project-root-files-bottom-up "lakefile.toml"))
 
+;;;###autoload
 (with-eval-after-load 'org-src
   (defvar org-src-lang-modes)
   (add-to-list 'org-src-lang-modes
@@ -586,6 +587,7 @@ with the input method on, and \\[toggle-input-method] turns it off."
 ;; If the code that requires `markdown-mode' grows, we will extract it
 ;; into a new package that depends on it.  But a single expression is
 ;; not worth a package.
+;;;###autoload
 (with-eval-after-load 'markdown-mode
   (defvar markdown-code-lang-modes)
   (add-to-list 'markdown-code-lang-modes
