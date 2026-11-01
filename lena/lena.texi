@@ -188,8 +188,8 @@ Lena needs Emacs 30.1, instead of 29.1.
 @item
 Lena drops Nael's support for lsp-mode (@code{nael-lsp}) and uses Eglot only.
 @item
-The @code{Lena} input method replaces Nael's abbreviations (by Alex Loitzl, from
-Mekeor Melire's work on Nael's @samp{dev} branch): @samp{\to_1} gives @samp{→₁} instead of @samp{→_1},
+The @code{Lena} input method replaces Nael's abbreviations (derived from Mekeor
+Melire's work on Nael's @samp{dev} branch): @samp{\to_1} gives @samp{→₁} instead of @samp{→_1},
 and abbreviations that end in a non-word character, such as @code{\d==}, work.
 @end itemize
 
@@ -539,12 +539,12 @@ Doom's own @samp{:lang lean} module uses upstream Nael, so disable it: in
 
 @lisp
 (package! lena
-  :recipe (:host github :repo "ISTA-PLV/nael" :branch "lena"
+  :recipe (:host github :repo "ISTA-PLV/nael"
            :files ("lena/*.el" "lena/lena.info" "lena/lena.texi"
                    "lena/NOTICE" "lena/LICENSE*")))
 ;; With Evil:
 (package! lena-evil
-  :recipe (:host github :repo "ISTA-PLV/nael" :branch "lena"
+  :recipe (:host github :repo "ISTA-PLV/nael"
            :files ("lena-evil/*.el" "lena-evil/LICENSE")))
 @end lisp
 
