@@ -440,7 +440,7 @@ First clone the Git repository, then, in your Emacs initialization file,
 add Lena to ‘load-path’ and load it.  For lazy loading the
 autoloads-file needs to be built beforehand.
 
-     ;; git clone https://github.com/ISTA-PLV/nael.git ~/path/to/lena
+     ;; git clone https://github.com/ISTA-PLV/lena.git ~/path/to/lena
 
      (add-to-list 'load-path "~/path/to/lena/lena")
      ;; For Evil:
@@ -486,11 +486,11 @@ with the command ‘package-vc-upgrade’ or ‘package-vc-upgrade-all’.
                   '((lena
                      :doc "lena/README.org"
                      :lisp-dir "lena"
-                     :url "https://github.com/ISTA-PLV/nael.git")
+                     :url "https://github.com/ISTA-PLV/lena.git")
                     ;; For Evil:
                     ;; (lena-evil
                     ;;  :lisp-dir "lena-evil"
-                    ;;  :url "https://github.com/ISTA-PLV/nael.git")
+                    ;;  :url "https://github.com/ISTA-PLV/lena.git")
                     ))
 
           (package-initialize)
@@ -515,13 +515,13 @@ with the command ‘package-vc-upgrade’ or ‘package-vc-upgrade-all’.
           (use-package lena
             :vc ( :doc "lena/README.org"
                   :lisp-dir "lena"
-                  :url "https://github.com/ISTA-PLV/nael.git"))
+                  :url "https://github.com/ISTA-PLV/lena.git"))
 
           ;; For Evil:
           ;; (use-package lena-evil
           ;;   :after (lena evil)
           ;;   :vc ( :lisp-dir "lena-evil"
-          ;;         :url "https://github.com/ISTA-PLV/nael.git")
+          ;;         :url "https://github.com/ISTA-PLV/lena.git")
           ;;   :config (lena-evil-setup))
 
 
@@ -535,12 +535,12 @@ Doom's own ‘:lang lean’ module uses upstream Nael, so disable it: in
 Lena in ‘~/.doom.d/packages.el’:
 
      (package! lena
-       :recipe (:host github :repo "ISTA-PLV/nael"
+       :recipe (:host github :repo "ISTA-PLV/lena"
                 :files ("lena/*.el" "lena/lena.info" "lena/lena.texi"
                         "lena/NOTICE" "lena/LICENSE*")))
      ;; With Evil:
      (package! lena-evil
-       :recipe (:host github :repo "ISTA-PLV/nael"
+       :recipe (:host github :repo "ISTA-PLV/lena"
                 :files ("lena-evil/*.el" "lena-evil/LICENSE")))
 
    Set it up in ‘~/.doom.d/config.el’, with its keys under the local
@@ -721,7 +721,7 @@ Apache-2.0.  The test fixtures are recorded from iris-lean
 For details, see ‘NOTICE’ and ‘test/fixtures/README.org’.
 
    Lena is maintained by _Klaus Kraßnitzer_ and _Alex Loitzl_ of ISTA
-PLV at github.com/ISTA-PLV/nael (https://github.com/ISTA-PLV/nael);
+PLV at github.com/ISTA-PLV/lena (https://github.com/ISTA-PLV/lena);
 please report problems there.
 
    Nael, upstream, is maintained by _Mekeor Melire_ (mekeor@posteo.de

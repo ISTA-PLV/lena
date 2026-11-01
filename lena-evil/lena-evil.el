@@ -8,7 +8,7 @@
 ;;             Alex Loitzl <alexander.loitzl@ista.ac.at>
 ;; Package-Requires: ((emacs "30.1") (evil "1.15.0") (lena "0.8.3"))
 ;; SPDX-License-Identifier: GPL-3.0-only
-;; URL: https://github.com/ISTA-PLV/nael
+;; URL: https://github.com/ISTA-PLV/lena
 ;; Version: 0.8.3
 
 ;; This is licensed under GNU General Public License (version 3 only),

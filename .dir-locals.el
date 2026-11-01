@@ -2,7 +2,7 @@
 
 ((nil
   (bug-reference-url-format
-   . "https://github.com/ISTA-PLV/nael/issues/%s")
+   . "https://github.com/ISTA-PLV/lena/issues/%s")
   (compile-command
    . "./build.el")
   (sentence-end-double-space
