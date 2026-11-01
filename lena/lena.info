@@ -469,10 +469,7 @@ File: lena.info,  Node: Installation via package-vc,  Prev: Manual Installation,
 Since version 29, Emacs ships with ‘package-vc’ which enables the
 built-in package manager ‘package’ to install from version-controlled
 source repositories.  Keep in mind to regularly upgrade such packages
-with the command ‘package-vc-upgrade’ or ‘package-vc-upgrade-all’.  (And
-please ignore the warnings that arise when ‘package-vc’ attempts to
-byte-compile all Elisp source files in the repository instead of just
-the package-specific ones.)
+with the command ‘package-vc-upgrade’ or ‘package-vc-upgrade-all’.
 
   1. Installation via ‘package-vc-selected-packages’
 
@@ -745,18 +742,18 @@ Node: Installation17914
 Node: Installation from Sources18377
 Node: Manual Installation18725
 Node: Installation via package-vc19682
-Ref: Installation via package-vc-selected-packages20345
-Ref: Installation via use-package vc21488
-Node: Installation in Doom Emacs22379
-Node: Reporting Problems24917
-Node: Changelog25561
-Node: Lena not released yet26061
-Node: Version 082 from 2026-02-2226395
-Node: Version 080 from 2026-12-1626785
-Node: Version 070 from 2025-12-1527430
-Node: Version 062 from 2025-11-3028029
-Node: Version 060 from 2025-11-3028382
-Node: License and Maintenance29480
+Ref: Installation via package-vc-selected-packages20169
+Ref: Installation via use-package vc21312
+Node: Installation in Doom Emacs22203
+Node: Reporting Problems24741
+Node: Changelog25385
+Node: Lena not released yet25885
+Node: Version 082 from 2026-02-2226219
+Node: Version 080 from 2026-12-1626609
+Node: Version 070 from 2025-12-1527254
+Node: Version 062 from 2025-11-3027853
+Node: Version 060 from 2025-11-3028206
+Node: License and Maintenance29304
 
 End Tag Table
 

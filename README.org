@@ -312,9 +312,7 @@ built beforehand.
 Since version 29, Emacs ships with ~package-vc~ which enables the built-in
 package manager ~package~ to install from version-controlled source
 repositories. Keep in mind to regularly upgrade such packages with the command
-~package-vc-upgrade~ or ~package-vc-upgrade-all~. (And please ignore the warnings
-that arise when ~package-vc~ attempts to byte-compile all Elisp source files in
-the repository instead of just the package-specific ones.)
+~package-vc-upgrade~ or ~package-vc-upgrade-all~.
 
 **** Installation via ~package-vc-selected-packages~
 

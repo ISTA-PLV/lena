@@ -465,9 +465,7 @@ built beforehand.
 Since version 29, Emacs ships with @code{package-vc} which enables the built-in
 package manager @code{package} to install from version-controlled source
 repositories. Keep in mind to regularly upgrade such packages with the command
-@code{package-vc-upgrade} or @code{package-vc-upgrade-all}. (And please ignore the warnings
-that arise when @code{package-vc} attempts to byte-compile all Elisp source files in
-the repository instead of just the package-specific ones.)
+@code{package-vc-upgrade} or @code{package-vc-upgrade-all}.
 
 @enumerate
 @item
