@@ -21,12 +21,15 @@
 (defconst lena-eglot-compat-internals
   '(eglot--capabilities
     eglot--format-markup
+    eglot--managed-buffers
     eglot--signal-textDocument/didChange
     eglot--signal-textDocument/didClose
     eglot--signal-textDocument/didOpen
     eglot--TextDocumentPositionParams
     eglot--update-hints-1
-    jsonrpc--next-request-id)
+    jsonrpc--continuations
+    jsonrpc--next-request-id
+    jsonrpc--process)
   "Internal functions of Eglot and jsonrpc that Lena calls.")
 
 (when-let* ((missing (seq-remove #'fboundp lena-eglot-compat-internals)))
@@ -83,6 +86,43 @@ Eglot keeps them for a document version.  It has them since 1.19."
   "Return non-nil if Eglot has the semantic tokens of the current version.
 It may also have none, or those of an earlier version of the buffer."
   (eq (plist-get eglot--semtok-state :docver) eglot--docver))
+
+;; For `lena-snapshot', which records them as they are and copes with
+;; their absence.
+
+(defvar eglot--recent-changes)
+(defvar eglot--servers-by-project)
+
+(defun lena-eglot-compat-document-version ()
+  "Return the version of the current buffer that Eglot sent last, or nil."
+  (bound-and-true-p eglot--docver))
+
+(defun lena-eglot-compat-recent-changes ()
+  "Return the changes of the current buffer that Eglot has not sent yet."
+  (bound-and-true-p eglot--recent-changes))
+
+(defun lena-eglot-compat-semantic-tokens-state ()
+  "Return what Eglot keeps about the semantic tokens of the current buffer."
+  (bound-and-true-p eglot--semtok-state))
+
+(defun lena-eglot-compat-servers ()
+  "Return all servers that Eglot runs."
+  (seq-mapcat #'identity (hash-table-values eglot--servers-by-project)))
+
+(defun lena-eglot-compat-managed-buffers (server)
+  "Return the buffers that SERVER manages."
+  (eglot--managed-buffers server))
+
+(defun lena-eglot-compat-process (connection)
+  "Return the process of CONNECTION."
+  (jsonrpc--process connection))
+
+(defun lena-eglot-compat-pending-requests (connection)
+  "Return the number of requests through CONNECTION awaiting an answer."
+  (let ((continuations (jsonrpc--continuations connection)))
+    (if (hash-table-p continuations)
+        (hash-table-count continuations)
+      (length continuations))))
 
 (defun lena-eglot-compat-update-hints (from to)
   "Ask for the inlay hints between FROM and TO, and show them.

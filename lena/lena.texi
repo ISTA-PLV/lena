@@ -51,6 +51,7 @@ assistants and reviewed, tested and revised by Lena's maintainers.
 * Usage::
 * Configuration::
 * Installation::
+* Reporting Problems::
 * Changelog::
 * License and Maintenance::
 
@@ -172,6 +173,9 @@ messages.
 @item
 Keys for @uref{https://github.com/emacs-evil/evil, Evil}, in the separate package @code{lena-evil}, and a setup for Doom Emacs
 (see @emph{Installation in Doom Emacs}).
+@item
+Snapshots of the state of Lena, Eglot and Lean for reporting problems
+(@code{lena-snapshot}, @code{lena-snapshot.el}; see @emph{Reporting Problems}).
 @item
 Smaller changes: a better syntax table, also for ElDoc, and macros recognized
 as such; the first goal is no longer echoed (@code{lena-eglot-echo-goal}); a shorter
@@ -584,6 +588,22 @@ In the infoview's normal state, @samp{]g} and @samp{[g} go to the next and previ
 
 To work on Lena itself, use your clone in the recipes instead, as in
 @samp{(:local-repo "/path/to/lena" :files (...))}.
+
+@node Reporting Problems
+@chapter Reporting Problems
+
+When something looks wrong, @samp{M-x lena-snapshot} records the state of Lena, Eglot
+and Lean under @code{lena-snapshot-directory}; call it before restarting anything. Its
+most useful part is Eglot's events log, which Eglot limits to 2 MB and Doom
+Emacs turns off:
+
+@lisp
+(with-eval-after-load 'eglot  ; in Doom: (after! eglot ...)
+  (setq eglot-events-buffer-config '(:size 50000000 :format full)))
+@end lisp
+
+A snapshot contains your file and the others that the server opened; check it
+before sharing it.
 
 @node Changelog
 @chapter Changelog

@@ -88,6 +88,8 @@ Compared to Nael 0.8.3:
   messages.
 - Keys for [[https://github.com/emacs-evil/evil][Evil]], in the separate package ~lena-evil~, and a setup for Doom Emacs
   (see /Installation in Doom Emacs/).
+- Snapshots of the state of Lena, Eglot and Lean for reporting problems
+  (~lena-snapshot~, ~lena-snapshot.el~; see /Reporting Problems/).
 - Smaller changes: a better syntax table, also for ElDoc, and macros recognized
   as such; the first goal is no longer echoed (~lena-eglot-echo-goal~); a shorter
   ElDoc delay in Lena buffers (~lena-eldoc-idle-delay~).
@@ -426,6 +428,21 @@ In the infoview's normal state, =]g= and =[g= go to the next and previous goal,
 
 To work on Lena itself, use your clone in the recipes instead, as in
 =(:local-repo "/path/to/lena" :files (...))=.
+
+* Reporting Problems
+
+When something looks wrong, =M-x lena-snapshot= records the state of Lena, Eglot
+and Lean under ~lena-snapshot-directory~; call it before restarting anything. Its
+most useful part is Eglot's events log, which Eglot limits to 2 MB and Doom
+Emacs turns off:
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'eglot  ; in Doom: (after! eglot ...)
+  (setq eglot-events-buffer-config '(:size 50000000 :format full)))
+#+end_src
+
+A snapshot contains your file and the others that the server opened; check it
+before sharing it.
 
 * Changelog
 

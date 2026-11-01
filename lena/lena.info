@@ -55,6 +55,7 @@ maintainers.
 * Usage::
 * Configuration::
 * Installation::
+* Reporting Problems::
 * Changelog::
 * License and Maintenance::
 
@@ -184,6 +185,9 @@ Compared to Nael 0.8.3:
    • Keys for Evil (https://github.com/emacs-evil/evil), in the separate
      package ‘lena-evil’, and a setup for Doom Emacs (see _Installation
      in Doom Emacs_).
+   • Snapshots of the state of Lena, Eglot and Lean for reporting
+     problems (‘lena-snapshot’, ‘lena-snapshot.el’; see _Reporting
+     Problems_).
    • Smaller changes: a better syntax table, also for ElDoc, and macros
      recognized as such; the first goal is no longer echoed
      (‘lena-eglot-echo-goal’); a shorter ElDoc delay in Lena buffers
@@ -395,7 +399,7 @@ character instead, e.g.  ‘\<’ for ‘⟨’.  For brackets like ‘⟨’, �
 ‘⦃’, ‘electric-pair-mode’ can insert the closing one.
 
 
-File: lena.info,  Node: Installation,  Next: Changelog,  Prev: Configuration,  Up: Top
+File: lena.info,  Node: Installation,  Next: Reporting Problems,  Prev: Configuration,  Up: Top
 
 5 Installation
 **************
@@ -583,9 +587,26 @@ comes back.  The descriptions open in ‘*Lena Help*’, where ‘C-o’ and
 ‘(:local-repo "/path/to/lena" :files (...))’.
 
 
-File: lena.info,  Node: Changelog,  Next: License and Maintenance,  Prev: Installation,  Up: Top
+File: lena.info,  Node: Reporting Problems,  Next: Changelog,  Prev: Installation,  Up: Top
 
-6 Changelog
+6 Reporting Problems
+********************
+
+When something looks wrong, ‘M-x lena-snapshot’ records the state of
+Lena, Eglot and Lean under ‘lena-snapshot-directory’; call it before
+restarting anything.  Its most useful part is Eglot's events log, which
+Eglot limits to 2 MB and Doom Emacs turns off:
+
+     (with-eval-after-load 'eglot  ; in Doom: (after! eglot ...)
+       (setq eglot-events-buffer-config '(:size 50000000 :format full)))
+
+   A snapshot contains your file and the others that the server opened;
+check it before sharing it.
+
+
+File: lena.info,  Node: Changelog,  Next: License and Maintenance,  Prev: Reporting Problems,  Up: Top
+
+7 Changelog
 ***********
 
 * Menu:
@@ -600,7 +621,7 @@ File: lena.info,  Node: Changelog,  Next: License and Maintenance,  Prev: Instal
 
 File: lena.info,  Node: Lena not released yet,  Next: Version 082 from 2026-02-22,  Up: Changelog
 
-6.1 Lena, not released yet
+7.1 Lena, not released yet
 ==========================
 
    • Based on Nael 0.8.3, and renamed from Nael to Lena.  See _What It
@@ -610,7 +631,7 @@ File: lena.info,  Node: Lena not released yet,  Next: Version 082 from 2026-02-2
 
 File: lena.info,  Node: Version 082 from 2026-02-22,  Next: Version 080 from 2026-12-16,  Prev: Lena not released yet,  Up: Changelog
 
-6.2 Version 0.8.2 from 2026-02-22
+7.2 Version 0.8.2 from 2026-02-22
 =================================
 
    • Improved rules for Font-Lock: Highlight identifiers in their
@@ -620,7 +641,7 @@ File: lena.info,  Node: Version 082 from 2026-02-22,  Next: Version 080 from 202
 
 File: lena.info,  Node: Version 080 from 2026-12-16,  Next: Version 070 from 2025-12-15,  Prev: Version 082 from 2026-02-22,  Up: Changelog
 
-6.3 Version 0.8.0 from 2026-12-16
+7.3 Version 0.8.0 from 2026-12-16
 =================================
 
    • Fix bugs related to automatic abbreviation expansion:
@@ -635,7 +656,7 @@ File: lena.info,  Node: Version 080 from 2026-12-16,  Next: Version 070 from 202
 
 File: lena.info,  Node: Version 070 from 2025-12-15,  Next: Version 062 from 2025-11-30,  Prev: Version 080 from 2026-12-16,  Up: Changelog
 
-6.4 Version 0.7.0 from 2025-12-15
+7.4 Version 0.7.0 from 2025-12-15
 =================================
 
    • Remove the ‘nael-markdown’ package.  Move its code into ‘nael’
@@ -648,7 +669,7 @@ File: lena.info,  Node: Version 070 from 2025-12-15,  Next: Version 062 from 202
 
 File: lena.info,  Node: Version 062 from 2025-11-30,  Next: Version 060 from 2025-11-30,  Prev: Version 070 from 2025-12-15,  Up: Changelog
 
-6.5 Version 0.6.2 from 2025-11-30
+7.5 Version 0.6.2 from 2025-11-30
 =================================
 
    • Re-add readme as .texi and .info to repository because Nael might
@@ -657,7 +678,7 @@ File: lena.info,  Node: Version 062 from 2025-11-30,  Next: Version 060 from 202
 
 File: lena.info,  Node: Version 060 from 2025-11-30,  Prev: Version 062 from 2025-11-30,  Up: Changelog
 
-6.6 Version 0.6.0 from 2025-11-30
+7.6 Version 0.6.0 from 2025-11-30
 =================================
 
    • Remove .texi, .info, and -autoloads.el files from repository.
@@ -682,7 +703,7 @@ File: lena.info,  Node: Version 060 from 2025-11-30,  Prev: Version 062 from 202
 
 File: lena.info,  Node: License and Maintenance,  Prev: Changelog,  Up: Top
 
-7 License and Maintenance
+8 License and Maintenance
 *************************
 
 Like Nael, Lena is effectively licensed under GNU GPL version 3 only.
@@ -713,28 +734,29 @@ please report problems there.
 
 Tag Table:
 Node: Top192
-Node: Lineage and Credits2915
-Node: Lineage3100
-Node: Credits4372
-Node: What It Adds6093
-Node: Get Started8216
-Node: Usage8608
-Node: Configuration15577
-Node: Installation17739
-Node: Installation from Sources18193
-Node: Manual Installation18541
-Node: Installation via package-vc19498
-Ref: Installation via package-vc-selected-packages20161
-Ref: Installation via use-package vc21304
-Node: Installation in Doom Emacs22195
-Node: Changelog24763
-Node: Lena not released yet25257
-Node: Version 082 from 2026-02-2225591
-Node: Version 080 from 2026-12-1625981
-Node: Version 070 from 2025-12-1526626
-Node: Version 062 from 2025-11-3027225
-Node: Version 060 from 2025-11-3027578
-Node: License and Maintenance28676
+Node: Lineage and Credits2938
+Node: Lineage3123
+Node: Credits4395
+Node: What It Adds6116
+Node: Get Started8399
+Node: Usage8791
+Node: Configuration15760
+Node: Installation17922
+Node: Installation from Sources18385
+Node: Manual Installation18733
+Node: Installation via package-vc19690
+Ref: Installation via package-vc-selected-packages20353
+Ref: Installation via use-package vc21496
+Node: Installation in Doom Emacs22387
+Node: Reporting Problems24955
+Node: Changelog25599
+Node: Lena not released yet26099
+Node: Version 082 from 2026-02-2226433
+Node: Version 080 from 2026-12-1626823
+Node: Version 070 from 2025-12-1527468
+Node: Version 062 from 2025-11-3028067
+Node: Version 060 from 2025-11-3028420
+Node: License and Maintenance29518
 
 End Tag Table
 
