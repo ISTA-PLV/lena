@@ -312,10 +312,8 @@ LINE, which is 0-based; each line occurs at most once."
 HELP is shown in its tooltip."
   (let ((sign (lena-margin-scale-emoji
                (truncate-string-to-width string lena-margin-width))))
-    ;; The face `margin' is new in Emacs 31.
     (add-face-text-property
-     0 (length sign)
-     `(:inherit (,face ,(if (facep 'margin) 'margin 'default))) t sign)
+     0 (length sign) `(:inherit (,face margin)) t sign)
     (add-text-properties 0 (length sign)
                          `(help-echo ,help mouse-face highlight
                                      keymap ,lena-margin-sign-map)

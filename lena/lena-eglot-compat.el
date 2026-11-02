@@ -28,7 +28,6 @@
     eglot--TextDocumentPositionParams
     eglot--update-hints-1
     jsonrpc--continuations
-    jsonrpc--next-request-id
     jsonrpc--process)
   "Internal functions of Eglot and jsonrpc that Lena calls.")
 
@@ -65,13 +64,6 @@ The column is counted in UTF-16 code units, as LSP requires."
 (defun lena-eglot-compat-capabilities (server)
   "Return the capabilities that SERVER announced on initialization."
   (eglot--capabilities server))
-
-(defun lena-eglot-compat-last-request-id (connection)
-  "Return the id of the request just sent through CONNECTION.
-Only for jsonrpc 1.0.25 (Emacs 30), whose `jsonrpc-async-request'
-returns nil instead of the id; remove this once Lena needs a later
-jsonrpc."
-  (jsonrpc--next-request-id connection))
 
 (defvar eglot--semtok-state)
 
