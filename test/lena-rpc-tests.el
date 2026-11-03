@@ -262,24 +262,6 @@ Each is a plist with `:id', `:method', `:params', `:success-fn',
           (lena-rpc-test-answer old nil))
         (should (equal results '((new :goals []))))))))
 
-(ert-deftest lena-rpc-test-cancel-without-returned-id ()
-  "A call is cancelled on the server also when jsonrpc returns no id."
-  (lena-rpc-test-with-fake
-    (with-temp-buffer
-      (let ((handle (lena-rpc-test-handle (current-buffer))))
-        (lena-rpc-test-connect)
-        (cl-letf* ((request (symbol-function 'jsonrpc-async-request))
-                   ((symbol-function 'jsonrpc-async-request)
-                    (lambda (&rest args) (apply request args) nil))
-                   ((symbol-function 'lena-eglot-compat-last-request-id)
-                    (lambda (_connection) lena-rpc-test-next-id)))
-          (lena-rpc-cancel (lena-rpc-get-interactive-goals handle #'ignore)))
-        (should (member (cons :$/cancelRequest
-                              (list :id (plist-get
-                                         (lena-rpc-test-find :$/lean/rpc/call)
-                                         :id)))
-                        lena-rpc-test-notifications))))))
-
 (ert-deftest lena-rpc-test-cancelled-result-refs-released ()
   "References in the answer to a cancelled call are released."
   (lena-rpc-test-with-fake

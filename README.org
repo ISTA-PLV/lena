@@ -95,7 +95,7 @@ Compared to Nael 0.8.3:
   ElDoc delay in Lena buffers (~lena-eldoc-idle-delay~).
 - Tests in =test/=: =emacs -Q --batch -l build.el test=, and =test-live= with a Lean
   installation.
-- Lena needs Emacs 30.1, instead of 29.1.
+- Lena needs Emacs 31.1, instead of 29.1.
 - Lena drops Nael's support for lsp-mode (~nael-lsp~) and uses Eglot only.
 - The ~Lena~ input method replaces Nael's abbreviations (derived from Mekeor
   Melire's work on Nael's =dev= branch): =\to_1= gives =→₁= instead of =→_1=,

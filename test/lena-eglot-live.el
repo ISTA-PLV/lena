@@ -70,8 +70,6 @@ the server must work on it again."
 Eglot keeps the tokens of a document version, and the file is reopened
 with the same version; here the tokens it has are empty, as when the
 file was opened with imports out of date."
-  (unless (fboundp 'eglot-semantic-tokens-mode)
-    (ert-skip "This Eglot does not show semantic tokens"))
   (with-current-buffer (lena-rpc-live-buffer)
     (unwind-protect
         (progn
@@ -93,8 +91,6 @@ file was opened with imports out of date."
   "Once Lean has processed the file, Eglot asks again for lost semantic tokens.
 Here the request times out, as it can while Lean loads the imports of a
 file just opened, so its answer is lost."
-  (unless (fboundp 'eglot-semantic-tokens-mode)
-    (ert-skip "This Eglot does not show semantic tokens"))
   (with-current-buffer (lena-rpc-live-buffer)
     (unwind-protect
         (progn

@@ -492,10 +492,7 @@ that the position refers to text that the server has seen."
                          (lena-rpc--deliver-failure
                           request (list :code nil :timeout t
                                         :message "Lean RPC call timed out"))))))
-            ;; Since jsonrpc 1.0.26, the result starts with the id.
-            (setf (lena-rpc-request-id request)
-                  (or (car-safe sent)
-                      (lena-eglot-compat-last-request-id connection))))
+            (setf (lena-rpc-request-id request) (car sent)))
         ;; A server that has exited takes its sessions with it.  Report
         ;; it like a dead session instead of letting jsonrpc signal from
         ;; a timer or hook.
@@ -524,8 +521,7 @@ that the position refers to text that the server has seen."
 
 (defun lena-rpc-cancel (request)
   "Cancel REQUEST: its success and failure functions will not be called.
-If REQUEST was already sent, the server is asked to stop working on it.
-That needs jsonrpc 1.0.26 or later, which reports request ids."
+If REQUEST was already sent, the server is asked to stop working on it."
   (unless (or (lena-rpc-request-cancelled request)
               (lena-rpc-request-done request))
     (setf (lena-rpc-request-cancelled request) t)
