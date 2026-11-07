@@ -286,20 +286,16 @@
 
 (defun lena-comment-insert ()
   "`comment-insert-comment-function' for `lena-mode'."
-  (interactive)
-  (if (save-excursion (beginning-of-line)
-                      (looking-at-p "[[:blank:]]*$"))
-      (progn
-        ;; Respect users who set `comment-start' to "--".
-        (insert comment-start " ")
-        ;; Respect users who set `comment-end' to "".
-        (unless (length= comment-end 0)
-          (save-excursion
-            (insert " " comment-end))))
+  ;; If point is in a non-empty line, move to end of line and optionally
+  ;; add padding.
+  (unless (save-excursion (beginning-of-line)
+                          (looking-at-p "[[:blank:]]*$"))
     (end-of-line)
     (unless (looking-back "[[:blank:]]" (1- (point)))
-      (insert " "))
-    (insert "-- ")))
+      (insert " ")))
+  ;; `comment-indent-new-line' binds `comment-start' to the previous
+  ;; comment's starter including its padding, therefore trim.
+  (insert (string-trim-right comment-start) " "))
 
 (defun lena-fill-paragraph (&optional justify)
   "Fill comment paragraph at point.  Maybe JUSTIFY."
@@ -314,7 +310,7 @@
                             (re-search-backward paragraph-start nil t)
                             (match-beginning 0)))
                  (beg (max com-beg par-beg))
-                 (com-end (if multi "-/" "$"))
+                 (com-end "-/")
                  (com-end (save-excursion
                             ;; If cursor is at -|/, then move to |-/,
                             ;; so that `re-search-forward' can locate
@@ -329,16 +325,13 @@
                             (match-end 0)))
                  (end (min com-end par-end)))
             (fill-region beg end justify))
-        ;; `fill-comment-paragraph' fills prefixed comments well, when
-        ;; configured correctly.
-        (let ((comment-start "--") (comment-end ""))
-          ;; For some reason, "" is used as fill-prefix by
-          ;; `fill-comment-paragraph' when point is at --|.  Avoid
-          ;; this misbehavior by moving point forward one char.
-          (and (not (eolp))
-               (looking-back "--" (max (- (point) 2) (point-min)))
-               (forward-char))
-          (fill-comment-paragraph justify))))))
+        ;; For some reason, "" is used as fill-prefix by
+        ;; `fill-comment-paragraph' when point is at --|.  Avoid this
+        ;; misbehavior by moving point forward one char.
+        (and (not (eolp))
+             (looking-back "--" (max (- (point) 2) (point-min)))
+             (forward-char))
+        (fill-comment-paragraph justify)))))
 
 ;; TODO: Both `lena-navigation-defun-beginning' and
 ;; `lena-navigation-defun-name' currently lack support for `mutual'
@@ -522,9 +515,9 @@ with the input method on, and \\[toggle-input-method] turns it off."
               #'lena-fill-paragraph)
   ;; Comments:
   (setq-local comment-end
-              "-/")
+              "")
   (setq-local comment-end-skip
-              "[[:space:]]*-/")
+              "[[:space:]]*\\(?:-/\\|\\s>\\)")
   (setq-local comment-insert-comment-function
               #'lena-comment-insert)
   (setq-local comment-padding
@@ -532,11 +525,9 @@ with the input method on, and \\[toggle-input-method] turns it off."
   (setq-local comment-quote-nested ;; Comments may be nested.
               nil)
   (setq-local comment-start
-              "/-")
+              "--")
   (setq-local comment-start-skip
-              "/-[[:space:]]*")
-  (setq-local comment-style
-              'multi-line)
+              "[-/]-[[:space:]]*")
   (setq-local comment-use-syntax
               t)
   (setq-local parse-sexp-ignore-comments
