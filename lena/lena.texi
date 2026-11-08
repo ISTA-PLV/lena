@@ -290,7 +290,7 @@ built beforehand.
 ;; (require 'lena-autoloads)
 ;; (require 'lena-evil-autoloads)
 
-;; Optionally@comma{} make readme available as info manual:
+;; Optionally@comma{} make the README available as an Info manual:
 (require 'info)
 (info-initialize)
 (add-to-list 'Info-directory-list "~/path/to/lena/lena")
@@ -378,7 +378,7 @@ In the infoview's normal state@comma{} @samp{]g} and @samp{[g} go to the next an
 @node Configuration
 @section Configuration
 
-Below@comma{} we highlight some of Lena's user options@comma{} for the complete list@comma{} use
+Below@comma{} we highlight some of Lena's user options; for the complete list@comma{} use
 @samp{M-x customize-group RET lena RET}.
 
 You can bind custom keys in @code{lena-mode-map}:
@@ -413,9 +413,9 @@ characters to the line height.
 @end lisp
 
 To keep Flymake's indicators instead of the signs@comma{} set @code{lena-margin} to @samp{nil}@comma{}
-before visiting a lean file.
+before visiting a Lean file.
 
-Lena truncates the the trace of Flymake@comma{} only showing "(trace)"@comma{} as in VS Code.
+Lena truncates the trace of Flymake@comma{} only showing "(trace)"@comma{} as in VS Code.
 To keep the full text in Flymake instead@comma{} set @code{lena-eglot-widgets} to @samp{nil}
 before Lean starts.
 
@@ -428,7 +428,7 @@ instead@comma{} set @code{lena-prepare-quail} to @samp{nil}.
 
 We welcome contributions of any kind! Especially@comma{} bug reports and PRs addressing
 open issues. If you are interested in extending Lena and upstreaming changes@comma{}
-please open a feature request as an Issue on Github. For more details@comma{} see
+please open a feature request as an issue on GitHub. For more details@comma{} see
 @uref{https://github.com/ISTA-PLV/lena/blob/main/CONTRIBUTING.org, CONTRIBUTING.org}.
 
 @menu
@@ -469,7 +469,7 @@ the infoview is modelled after @uref{https://github.com/Julian/lean.nvim, lean.n
 the test fixtures are from @uref{https://github.com/leanprover-community/iris-lean, iris-lean}
 @end itemize
 
-For a more detailed per-file breakdown@comma{} consider the copyright header of each file.
+For a more detailed per-file breakdown@comma{} see the copyright header of each file.
 
 @node License and Maintenance
 @chapter License and Maintenance

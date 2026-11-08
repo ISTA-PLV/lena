@@ -139,7 +139,7 @@ built beforehand.
 ;; (require 'lena-autoloads)
 ;; (require 'lena-evil-autoloads)
 
-;; Optionally, make readme available as info manual:
+;; Optionally, make the README available as an Info manual:
 (require 'info)
 (info-initialize)
 (add-to-list 'Info-directory-list "~/path/to/lena/lena")
@@ -223,7 +223,7 @@ In the infoview's normal state, =]g= and =[g= go to the next and previous goal,
 
 ** Configuration
 
-Below, we highlight some of Lena's user options, for the complete list, use
+Below, we highlight some of Lena's user options; for the complete list, use
 =M-x customize-group RET lena RET=.
 
 You can bind custom keys in ~lena-mode-map~:
@@ -253,9 +253,9 @@ characters to the line height.
 #+end_src
 
 To keep Flymake's indicators instead of the signs, set ~lena-margin~ to =nil=,
-before visiting a lean file.
+before visiting a Lean file.
 
-Lena truncates the the trace of Flymake, only showing "(trace)", as in VS Code.
+Lena truncates the trace of Flymake, only showing "(trace)", as in VS Code.
 To keep the full text in Flymake instead, set ~lena-eglot-widgets~ to =nil=
 before Lean starts.
 
@@ -267,7 +267,7 @@ instead, set ~lena-prepare-quail~ to =nil=.
 
 We welcome contributions of any kind! Especially, bug reports and PRs addressing
 open issues. If you are interested in extending Lena and upstreaming changes,
-please open a feature request as an Issue on Github. For more details, see
+please open a feature request as an issue on GitHub. For more details, see
 [[https://github.com/ISTA-PLV/lena/blob/main/CONTRIBUTING.org][CONTRIBUTING.org]].
 
 ** Reporting Problems
@@ -295,7 +295,7 @@ Lena builds on the ideas and code of many other projects in order to provide the
 - the infoview is modelled after [[https://github.com/Julian/lean.nvim][lean.nvim]], and [[https://github.com/leanprover/vscode-lean4][vscode-lean4]],
 - the test fixtures are from [[https://github.com/leanprover-community/iris-lean][iris-lean]]
 
-For a more detailed per-file breakdown, consider the copyright header of each file.
+For a more detailed per-file breakdown, see the copyright header of each file.
 
 * License and Maintenance
 
