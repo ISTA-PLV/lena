@@ -1,5 +1,5 @@
 #+title: Lena — An Emacs major mode for Lean
-#+author: Mekeor Melire and ISTA PLV
+#+author: ISTA PLV
 #+language: en
 #+texinfo_dir_category: Emacs misc features
 #+texinfo_dir_desc: Major mode for Lean.
@@ -8,274 +8,112 @@
 #+options: toc:nil
 
 Lena is a set of packages that extend [[https://www.gnu.org/software/emacs/][GNU Emacs]] for the [[https://lean-lang.org][Lean]] language. It is
-a fork of [[https://codeberg.org/mekeor/nael][Nael]] by Mekeor Melire, which is itself a radically refactored
-fork of [[https://github.com/leanprover-community/lean4-mode][Lean4-Mode]] with focus on simplicity, modularity and integration into
-Emacs' core. Lena adds an infoview, signs in the
-margin and more. See /Lineage and Credits/ for more information about Lena's
-lineage.
+based off [[https://codeberg.org/mekeor/nael][Nael]] additionally providing an infoview, signs in the margin and more.
+See [[*Credits][Credits]] for more information about Lena's lineage.
 
-The ~lena~ package defines the major mode. It also introduces the ~Lena~
-[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Input-Methods.html][input method]] for typing Unicode characters common in Lean, such as =\a= for =α=.
-Lena teaches Emacs' built-in
-[[https://microsoft.github.io/language-server-protocol/][LSP]] client [[https://www.gnu.org/software/emacs/manual/html_node/eglot/][Eglot]] about [[https://github.com/leanprover/lean4/blob/master/src/Lean/Data/Lsp/Extra.lean][Lean-specific LSP-extensions]], tells [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Programming-Language-Doc.html][ElDoc]] to display that
-information, and shows it in an infoview, like the “[[https://github.com/leanprover/vscode-lean4/blob/master/vscode-lean4/manual/manual.md#infoview][info view]]” in [[https://marketplace.visualstudio.com/items?itemName=leanprover.lean4][vscode-lean]].
-The separate package ~lena-evil~ binds keys for [[https://github.com/emacs-evil/evil][Evil]].
-
-Lena works with Eglot only. Nael's support for [[https://github.com/emacs-lsp/lsp-mode][lsp-mode]], its package ~nael-lsp~,
-is not part of Lena.
+Lena is not on Elpa or Melpa yet. To install Lena, use ~package-vc~ or a clone of
+this repository, see [[*Install][Install]] for detailed instructions.
 
 *Note*: Much of the code that Lena adds to Nael was written with the help of AI
 assistants and reviewed, tested and revised by Lena's maintainers.
 
-* Lineage and Credits
+* Table of Contents
+- [[*Features][Features]]
+- [[*Usage][Usage]]
+- [[*Install][Install]]
+- [[*Contribute][Contribute]]
+  + [[*Reporting Problems][Reporting Problems]]
+- [[*Credits][Credits]]
+- [[*License and Maintenance][License]]
 
-** Lineage
+* Features
 
-- [[https://github.com/leanprover-community/lean4-mode][Lean4-Mode]] is the Lean community's Emacs mode for Lean 4.
-- Nael is Mekeor Melire's fork of it, on [[https://codeberg.org/mekeor/nael][Codeberg]] and [[https://melpa.org/#/nael][Melpa]]. Lena's major mode,
-  its Font-Lock rules, navigation and much of this manual are Nael's. Lena's
-  input method starts from Mekeor Melire's work on Nael's =dev= branch.
-- Lena branched from Nael 0.8.3 (commit =c1d3497= of Nael's =release= branch) and
-  was later renamed to Lena.
-- It builds on code from elsewhere: ~lena-eglot.el~'s building of imports
-  (=dependencyBuildMode=) and restarting of files are adapted from Doug Torrance's
-  [[https://github.com/d-torrance/lean4-mode][lean4-mode]]; ~lena-rpc.el~ is derived from that lean4-mode's =lean4-rpc.el=, which
-  is derived from Jan Mas Rovira's [[https://github.com/janmasrovira/neo-lean-mode][neo-lean-mode]]; the smartparens pairs and the Doom Emacs
-  setup in this manual follow Doom Emacs' own =:lang lean= module. See /License
-  and Maintenance/ and =NOTICE=.
+Collection of gifs to show off the features (We can also do a list for now)
 
-** Credits
-
-Lena builds on the work of many people:
-
-- /Mekeor Melire/ wrote [[https://codeberg.org/mekeor/nael][Nael]], which Lena is a fork of.
-- The authors of [[https://github.com/leanprover-community/lean4-mode][Lean4-Mode]] and its predecessors, whom ~lena.el~ names: Adam
-  Topaz, Akira Komamura, Bao Zhiyuan, Daniel Selsam, Gabriel Ebner, Henrik
-  Böving, Hongyu Ouyang, Jakub Bartczuk, Leonardo de Moura, Mauricio Collares,
-  Mekeor Melire, Philip Kaludercic, Richard Copley, Sebastian Ullrich, Siddharth
-  Bhat, Simon Hudon, Soonho Kong, Tomáš Skřivan, Wojciech Nawrocki, Yael Dillies
-  and Yury G. Kudryashov.
-- /Doug Torrance/'s [[https://github.com/d-torrance/lean4-mode][lean4-mode]] and /Jan Mas Rovira/'s [[https://github.com/janmasrovira/neo-lean-mode][neo-lean-mode]], whose RPC
-  client Lena's is derived from, and whose building of imports Lena adapts.
-- [[https://github.com/leanprover/vscode-lean4][vscode-lean4]], the Lean extension for VS Code: Lena's input method is
-  generated from its abbreviation data, and Lena's infoview is modelled on its
-  infoview.
-- [[https://github.com/Julian/lean.nvim][lean.nvim]], whose infoview keys some of the keys of ~lena-evil~ follow.
-- /Henrik Lissner/ and the contributors of [[https://github.com/doomemacs/doomemacs][Doom Emacs]], whose =:lang lean= module
-  Lena's smartparens pairs and Doom Emacs setup follow.
-- The authors of [[https://github.com/leanprover-community/iris-lean][iris-lean]], from which the test fixtures are recorded.
-
-** What It Adds
-
-Compared to Nael 0.8.3:
-
-- An infoview (~lena-infoview~, =C-c C-i=) that talks to Lean's RPC: goals and the
-  expected type, with the changes of the tactic at point, folding and filters;
-  subterms described by ElDoc, tooltips and the help buffer =*Lena Help*=, and
-  followed to their definitions; the messages of the line of point, with traces,
-  suggestions to apply and links to the explanations of errors. Files:
-  ~lena-rpc.el~, ~lena-render.el~, ~lena-infoview.el~, ~lena-infoview-buffer.el~,
-  ~lena-infoview-hover.el~.
-- Signs in the left margin for diagnostics, complete proofs, unsolved goals,
-  uses of =sorry= and lines being processed (~lena-margin-mode~, ~lena-margin.el~).
-- For Eglot: restarting the current file, which builds its imports once
-  (~lena-eglot-restart-file~, =C-c C-r=); not building imports when a file is opened
-  (~lena-eglot-build-dependencies~); Lean's silent diagnostics and widgets in
-  messages.
-- Keys for [[https://github.com/emacs-evil/evil][Evil]], in the separate package ~lena-evil~, and a setup for Doom Emacs
-  (see /Installation in Doom Emacs/).
-- Snapshots of the state of Lena, Eglot and Lean for reporting problems
-  (~lena-snapshot~, ~lena-snapshot.el~; see /Reporting Problems/).
-- Smaller changes: a better syntax table, also for ElDoc, and macros recognized
-  as such; the first goal is no longer echoed (~lena-eglot-echo-goal~); a shorter
-  ElDoc delay in Lena buffers (~lena-eldoc-idle-delay~).
-- Tests in =test/=: =emacs -Q --batch -l build.el test=, and =test-live= with a Lean
-  installation.
-- Lena needs Emacs 31.1, instead of 29.1.
-- Lena drops Nael's support for lsp-mode (~nael-lsp~) and uses Eglot only.
-- The ~Lena~ input method replaces Nael's abbreviations (derived from Mekeor
-  Melire's work on Nael's =dev= branch): =\to_1= gives =→₁= instead of =→_1=,
-  and abbreviations that end in a non-word character, such as ~\d==~, work.
-
-* Get Started
-
-Lena is not on Elpa or Melpa yet. To install Lena, use ~package-vc~ or a clone of
-this repository, see the /Installation/ chapter below.
-
-Lena, (upstream) Nael and Lean4-Mode each make themselves the major mode for =.lean=
-files, so install only one of them.
 
 * Usage
 
-Language Server Protocol (LSP):
+** In Lean Buffer
 
-- =C-c C-e= (~eglot~) starts Eglot, the LSP client.
-- =C-c C-r= (~lena-eglot-restart-file~) makes the Lean server reprocess the current
-  file, building its imports first if they are out of date. Opening a file does
-  not build its imports, unless ~lena-eglot-build-dependencies~ is non-nil.
-- =C-c C-i= (~lena-infoview~) toggles the infoview, a window that shows the goals
-  and the expected type at point and follows point. It needs Lean 4.30 or
-  later.
-- =C-h .= (~eldoc-doc-buffer~) displays the ElDoc documentation buffer showing
-  tactic state and expected goal at point, unless the infoview shows them.
+| Key         | Command                   | Effect                                                 |
+|-------------+---------------------------+--------------------------------------------------------|
+| =C-c C-e=   | ~eglot~                   | Start Eglot, the LSP client                            |
+| =C-c C-r=   | ~lena-eglot-restart-file~ | Reprocess the file, building out-of-date imports first |
+| =C-c C-i=   | ~lena-infoview~           | Toggle the infoview (needs Lean 4.30 or later)         |
+| =C-c C-c=   | ~project-compile~         | Build the project; suggests =lake build=               |
+| =C-h .=     | ~eldoc-doc-buffer~        | Show goals and expected type, when there's no infoview |
+| =C-\=       | ~toggle-input-method~     | Turn the ~Lena~ input method off and on                |
+| =C-u C-x == | ~describe-char~           | Describe the character at point, and how to type it    |
+| =M-g i=     | ~imenu~                   | Jump to a definition in the buffer                     |
 
-Signs in the left margin, while Eglot manages the buffer (~lena-margin-mode~):
+The ~Lena~ input method is on in Lean buffers, shown as =∃∀= in the mode line:
+For example, =\a= gives =α=, =\to= gives =→=, and =\\= a backslash.
 
-- =‼= marks the line of an error, =!= that of a warning or a note. A diagnostic that
-  spans several lines gets a bar over them instead, =┌=, =│=, =└=, in its color. These
-  are the indicators that Flymake shows otherwise; Flymake still underlines the
-  diagnostics and shows their messages. The tooltip of a sign shows the message,
-  and clicking it lists all diagnostics.
-- =✓= marks a proof that is complete, =✗= the last line of one with unsolved
-  goals, where it goes on, and =⚠= a declaration that uses =sorry=. Other signs,
-  such as emoji, can be set with ~lena-margin-goals-accomplished~,
-  ~lena-margin-unsolved-goals~ and ~lena-margin-admitted~; with most fonts, an emoji
-  makes its line taller, unless ~lena-margin-emoji-height~ makes it smaller, such
-  as 0.7.
-- An orange =│= marks the lines that Lean is still processing.
+** In the Infoview
 
-Infoview:
+The infoview follows point and shows the goals, the expected type and Lean's
+messages on the current line. While Lean builds the imports, it shows Lake's
+output.
 
-- Inspired by lean.nvim, in a complete proof, a line above the goals says "Goals
-  accomplished ✓", and replaces "no goals" when none are left.
-- Below the goals and the expected type, the section /Messages/ shows Lean's
-  messages on the line of point: errors, warnings, and output such as that of
-  =#check=. Messages that start on another line, like an error about a whole
-  proof, are folded; messages about the whole file, like that its imports are
-  out of date, are not, and come first. That message has a =[restart file]=
-  button, which does what =C-c C-r= does. Their terms are subterms like those of
-  goals. =RET= or =mouse-1= on the position of a message goes there in the source.
-- The messages of the whole file are in Flymake's list
-  (~flymake-show-buffer-diagnostics~), which also can be opened by clicking a
-  sign in the margin.
-- While Lean builds the imports, the infoview shows Lake's output.
-- Traces, as with =set_option trace.Meta.synthInstance true in=, are headings: =TAB=
-  on one shows its children, which Lean sends on request only.
-- Suggestions such as Lean's "Try this" have an =[apply]= button that replaces the
-  code in the source with the suggestion; this includes the tactics of libraries
-  that suggest through Lean's =TryThis=. Lean's hints show the change they suggest
-  as a diff, which applies the same way. The code of an error, such as
-  =[lean.invalidField]=, opens its explanation in Lean's reference manual.
-- =v= (~lena-infoview-view-options~) opens a menu for customizing what the infoview
-  shows: which hypotheses to hide, whether to show the target first and the
-  changes of the tactic at point, and how to show the expected type.
+| Key                     | Command                      | Effect                                                                       |
+|-------------------------+------------------------------+------------------------------------------------------------------------------|
+| =n= / =p=               | ~lena-infoview-next-goal~    | Next / previous goal                                                         |
+| =w=                     | ~lena-infoview-copy-goal~    | Copy the goal                                                                |
+| =v=                     | ~lena-infoview-view-options~ | Menu of what the infoview shows                                              |
+| =i= =t= =a= =l= =r= =d= |                              | Toggle instances, types, inaccessible names, let values, target first, diffs |
+| =TAB=                   |                              | Fold a heading, or expand a trace                                            |
+| =RET=, =mouse-1=        |                              | Press a button, like =[apply]=, or go to a message's position                |
 
-- With [[https://github.com/emacs-evil/evil][Evil]] and the ~lena-evil~ package, =(with-eval-after-load 'evil (lena-evil-setup))=
-  binds keys in normal state that don't clash with its motions: =]g= and =[g= for
-  the next and previous goal, =]h= and =[h= for headings, =gr= to refresh, =K= to
-  describe the subterm at point, and, with a local leader, =<localleader> v= for
-  the view options and =<localleader> y= to copy the goal.
+On a subterm of a goal:
 
-Infoview, on a subterm of a goal:
+| Key                       | Command                  | Effect                                                  |
+|---------------------------+--------------------------+---------------------------------------------------------|
+| =RET=, =mouse-1=, =C-h .= | ~lena-infoview-describe~ | Describe it in =*Lena Help*=: explicit form, type, docs |
+| =M-.= / =M-,=             | ~xref-find-definitions~  | Go to its definition / come back                        |
 
-- ElDoc echoes the subterm with all its arguments made explicit, and its
-  type. With [[https://github.com/casouri/eldoc-box][eldoc-box]], this appears in a popup.
-- With ~tooltip-mode~, the tooltip of the subterm under the mouse shows it with
-  its type and documentation. We suggest turning native tooltips off for better
-  formatting, by setting ~use-system-tooltips~ to =nil=.
-- =RET=, =mouse-1= or =C-h .= (~lena-infoview-describe~) describes the subterm in the
-  help buffer =*Lena Help*=: its explicit form, its type, its documentation, and
-  how the tactic at point changes it. Its subterms can be described in turn, and
-  the history goes back and forth: =l= and =r=, or =C-o= and =C-i= with Evil. In Doom
-  Emacs, =K= describes too. Closing the help window returns to the infoview.
-- =M-.= (~xref-find-definitions~) shows the definition of the subterm in another
-  window, and =M-,= (~xref-go-back~) returns to the infoview. In Doom Emacs, these
-  are =gd= and =C-o=.
+Hovering a subterm shows its explicit form and type with ElDoc (in a popup with
+[[https://github.com/casouri/eldoc-box][eldoc-box]]) and, with ~tooltip-mode~, in a tooltip; setting ~use-system-tooltips~
+to =nil= formats these better. In =*Lena Help*=, =l= and =r= go back and forth.
 
-Input method:
+** Signs in the Margin
 
-- Lean buffers start with the ~Lena~ input method on, shown as =∀= in the mode
-  line: typing an abbreviation like =\a= or =\to= inserts the corresponding
-  character, here =α= or =→=. =\\= inserts a backslash.
-- =C-\= (~toggle-input-method~) turns the input method off and on. Prompts
-  entered from a Lean buffer, such as searches, start with it off, so that
-  regexps like =\b= stay as they are; there, =C-\= turns on ~Lena~ too.
-- =C-u C-x == (~describe-char~) describes the character at point. While the input
-  method is active, this includes how to type the character.
+While Eglot manages the buffer, ~lena-margin-mode~ shows signs in the left
+margin in place of Flymake's indicators. Hovering a sign shows its message;
+clicking it lists all diagnostics.
 
-Build:
+| Sign        | Meaning                                |
+|-------------+----------------------------------------|
+| =‼= / =!=   | Error / warning or note on this line   |
+| =┌= =│= =└= | A diagnostic spanning several lines    |
+| =✓=         | Complete proof                         |
+| =✗=         | Unsolved goals; the proof goes on here |
+| =⚠=         | Declaration that uses =sorry=          |
+| orange =│=  | Lean is still processing these lines   |
 
-- =C-c C-c= (~project-compile~) prompts for a command to build the current
-  project. It will suggest =lake build= because Lena configures the
-  ~compile-command~ variable.
+** With Evil
 
-Navigation:
+With the ~lena-evil~ package, =(with-eval-after-load 'evil (lena-evil-setup))=
+binds these keys in the infoview's normal state:
 
-- =M-a= (~forward-sentence~) go to beginning of current sentence/block, or to
-  previous one.
-- =M-e= (~backward-sentence~) go to end of current sentence/block, or to next one.
-- =M-g i= (~imenu~) jumps to an interactively chosen definition in current buffer.
+| Key               | Effect                  |
+|-------------------+-------------------------|
+| =]g= / =[g=       | Next / previous goal    |
+| =]h= / =[h=       | Next / previous heading |
+| =gr=              | Refresh                 |
+| =K=               | Describe the subterm    |
+| =<localleader> v= | View options            |
+| =<localleader> y= | Copy the goal           |
 
-Comments:
+In =*Lena Help*=, =C-o= and =C-i= go back and forth. In Doom Emacs, =K=, =gd= and
+=C-o= describe, go to a definition, and come back.
 
-- =M-;= (~comment-dwim~) toggles the active region as comment or, if no region is
-  active, creates a comment at end of line.
-- =M-q= (~prog-fill-reindent-defun~) fills the string- or comment-paragraph at
-  point, or reindents the point-surrounding code.
-
-* Configuration
-
-To view the complete list of Lena's user option variables from within Emacs,
-customize the group ~lena~ (and its child-groups) with =M-x customize-group RET
-lena RET=. This chapter highlights and elaborates on some of them.
-
-As an exception, Emacs customization groups cannot include keymaps. You can bind
-custom keys in ~lena-mode-map~ like this:
-
-#+begin_src emacs-lisp
-(keymap-set lena-mode-map "C-c ." #'highlight-symbol-at-point)
-#+end_src
-
-To automatically enable features (e.g. Eglot) when Lena is started, customize
-~lena-mode-hook~ as follows:
-
-#+begin_src emacs-lisp
-(add-hook 'lena-mode-hook #'eglot-ensure)
-#+end_src
-
-The signs in the margin can be changed, also for a single project in its
-=.dir-locals.el=. For example, with chickens:
-
-#+begin_src emacs-lisp
-(setq lena-margin-goals-accomplished "🐣"  ; complete proof
-      lena-margin-unsolved-goals "🥚"      ; unsolved goals
-      lena-margin-admitted "🍗"            ; uses sorry
-      lena-margin-emoji-height 0.7)        ; as tall as text lines
-#+end_src
-
-The margin is as wide as its widest sign.
-
-To keep Flymake's indicators instead of the signs, set ~lena-margin~ to =nil= before
-opening Lean files.
-
-For the infoview to show messages with their terms, traces and suggestions, Lena
-asks Lean for them when the project's =lean-toolchain= names Lean 4.30 or
-later. Then the text of a trace that Flymake shows is only "(trace)", as in VS
-Code. To keep the full text in Flymake instead, set ~lena-eglot-widgets~ to =nil=
-before Lean starts.
-
-To start Lean buffers with the input method off, set ~lena-activate-quail~ to
-=nil=; =C-\= still turns it on. To keep your global default input method
-instead, set ~lena-prepare-quail~ to =nil=.
-
-The input method does not include abbreviations that place point between two
-inserted strings, such as =\<>= for =⟨⟩=. Type the opening character instead,
-e.g. =\<= for =⟨=. For brackets like =⟨=, =⟦= and =⦃=, ~electric-pair-mode~ can insert
-the closing one.
-
-* Installation
+* Install
 
 Lena's LSP-based features require Lean version 4 to be [[https://lean-lang.org/install/manual/][installed]].
 
-Lena is not on Melpa yet. The ~nael~ and ~nael-lsp~ packages on [[https://melpa.org/#/nael][Melpa]] are upstream
-Nael, without Lena's additions.
+** Install from Source
 
-** Installation from Sources
-
-The instructions below install Lena. For upstream Nael, use
-=https://codeberg.org/mekeor/nael.git= instead.
-
-*** Manual Installation
+*** Manual
 
 First clone the Git repository, then, in your Emacs initialization file, add
 Lena to ~load-path~ and load it. For lazy loading the autoloads-file needs to be
@@ -305,51 +143,11 @@ built beforehand.
 
 *** Installation via ~package-vc~
 
-Since version 29, Emacs ships with ~package-vc~ which enables the built-in
-package manager ~package~ to install from version-controlled source
-repositories. Keep in mind to regularly upgrade such packages with the command
-~package-vc-upgrade~ or ~package-vc-upgrade-all~.
-
-**** Installation via ~package-vc-selected-packages~
-
-In your Emacs session, select packages per ~package-vc-selected-packages~
-variable and install them with =M-x package-vc-install-selected-packages
-RET=. Persist the package selection in your Emacs initialization file
-too. ~package-vc~ will generate the autoloads-file automatically. To lazy-load
-Lena, load the autoloads-file.
-
-#+begin_src emacs-lisp
-(require 'package-vc)
-
-(setopt package-vc-selected-packages
-        '((lena
-           :doc "lena/README.org"
-           :lisp-dir "lena"
-           :url "https://github.com/ISTA-PLV/lena.git")
-          ;; For Evil:
-          ;; (lena-evil
-          ;;  :lisp-dir "lena-evil"
-          ;;  :url "https://github.com/ISTA-PLV/lena.git")
-          ))
-
-(package-initialize)
-
-;; Option 1, lazy loading:
-(require 'lena-autoloads)
-;; (require 'lena-evil-autoloads)
-
-;; Option 2, eager loading:
-;; (require 'lena)
-;; (require 'lena-evil)
-#+end_src
-
-**** Installation via ~use-package~ =:vc=
-
-Since version 30 from 2025, Emacs' popular ~use-package~ macro supports a =:vc=
-keyword as interface to ~package-vc~. (Because each package has autoload-cookies
-on relevant expressions, and because ~use-package~ will load the autoloads-file
-that is generated at installation, you don't need to specify load-triggers like
-=:mode=. I.e. lazy-loading should work out of the box.)
+Emacs' ~use-package~ macro supports a =:vc= keyword as interface to
+~package-vc~. (Because each package has autoload-cookies on relevant
+expressions, and because ~use-package~ will load the autoloads-file that is
+generated at installation, you don't need to specify load-triggers like =:mode=.
+I.e. lazy-loading should work out of the box.)
 
 #+begin_src emacs-lisp
 (use-package lena
@@ -365,8 +163,7 @@ that is generated at installation, you don't need to specify load-triggers like
 ;;   :config (lena-evil-setup))
 #+end_src
 
-** Installation in Doom Emacs
-
+** Install for Doom Emacs
 Doom's own =:lang lean= module uses upstream Nael, so disable it: in
 =~/.doom.d/init.el=, comment out =lean= under =:lang=. Then declare Lena in
 =~/.doom.d/packages.el=:
@@ -382,8 +179,8 @@ Doom's own =:lang lean= module uses upstream Nael, so disable it: in
            :files ("lena-evil/*.el" "lena-evil/LICENSE")))
 #+end_src
 
-Set it up in =~/.doom.d/config.el=, with its keys under the local leader =SPC m=,
-then run =doom sync= and restart Emacs:
+Set it up in =~/.doom.d/config.el=, with its keys under the local leader =SPC
+m=, then run =doom sync= and restart Emacs:
 
 #+begin_src emacs-lisp
 ;; Lean's Unicode input, such as \to for →, is on in Lean buffers; C-\
@@ -420,10 +217,56 @@ In the infoview's normal state, =]g= and =[g= go to the next and previous goal,
 =gd= goes to its definition and =C-o= comes back. The descriptions open in
 =*Lena Help*=, where =C-o= and =C-i= go back and forth and =q= closes.
 
-To work on Lena itself, use your clone in the recipes instead, as in
-=(:local-repo "/path/to/lena" :files (...))=.
+** Configuration
 
-* Reporting Problems
+Below, we highlight some of Lena's user options, for the complete list, use
+=M-x customize-group RET lena RET=.
+
+You can bind custom keys in ~lena-mode-map~:
+
+#+begin_src emacs-lisp
+(keymap-set lena-mode-map "C-c ." #'highlight-symbol-at-point)
+#+end_src
+
+To automatically enable features (e.g. Eglot) when Lena is started, customize
+~lena-mode-hook~ as follows:
+
+#+begin_src emacs-lisp
+(add-hook 'lena-mode-hook #'eglot-ensure)
+#+end_src
+
+*** Flymake and Margin
+
+The signs in the margin can be changed, for example, with chickens below. Play
+around with the value for ~lena-margin-emoji-height~ to scale your chosen
+characters to the line height.
+
+#+begin_src emacs-lisp
+(setq lena-margin-goals-accomplished "🐣"  ; complete proof
+      lena-margin-unsolved-goals "🥚"      ; unsolved goals
+      lena-margin-admitted "🍗"            ; uses sorry
+      lena-margin-emoji-height 1)          ; as tall as text lines
+#+end_src
+
+To keep Flymake's indicators instead of the signs, set ~lena-margin~ to =nil=,
+before visiting a lean file.
+
+Lena truncates the the trace of Flymake, only showing "(trace)", as in VS Code.
+To keep the full text in Flymake instead, set ~lena-eglot-widgets~ to =nil=
+before Lean starts.
+
+To start Lean buffers with the input method off, set ~lena-activate-quail~ to
+=nil=; =C-\= still turns it on. To keep your global default input method
+instead, set ~lena-prepare-quail~ to =nil=.
+
+* Contribute
+
+We welcome contributions of any kind! Especially, bug reports and PRs addressing
+open issues. If you are interested in extending Lena and upstreaming changes,
+please open a feature request as an Issue on Github. For more details, see
+[[https://github.com/ISTA-PLV/lena/blob/main/CONTRIBUTING.org][CONTRIBUTING.org]].
+
+** Reporting Problems
 
 When something looks wrong, =M-x lena-snapshot= records the state of Lena, Eglot
 and Lean under ~lena-snapshot-directory~; call it before restarting anything. Its
@@ -438,61 +281,32 @@ Emacs turns off:
 A snapshot contains your file and the others that the server opened; check it
 before sharing it.
 
-* Changelog
+* Credits
 
-** Lena, not released yet
+Lena builds on the ideas and code of many other projects in order to provide the experience it does now. In particular,
+- Lena is forked off [[https://codeberg.org/mekeor/nael][Nael]],
+- dependency management and =lena-rpc.el= are adapted from Doug Torrance's
+  [[https://github.com/d-torrance/lean4-mode][lean4-mode]], and /Jan Mas Rovira/'s [[https://github.com/janmasrovira/neo-lean-mode][neo-lean-mode]],
+- Lena's input method is generated from [[https://github.com/leanprover/vscode-lean4][vscode-lean4]],
+- the infoview is modelled after [[https://github.com/Julian/lean.nvim][lean.nvim]], and [[https://github.com/leanprover/vscode-lean4][vscode-lean4]],
+- the test fixtures are from [[https://github.com/leanprover-community/iris-lean][iris-lean]]
 
-- Based on Nael 0.8.3, and renamed from Nael to Lena. See /What It Adds/ in the chapter /Lineage and Credits/. The versions below are Nael's, by Mekeor Melire.
-
-** Version 0.8.2 from 2026-02-22
-
-- Improved rules for Font-Lock: Highlight identifiers in their definitions. For example, in “def foo : Nat := 123”, =foo= will be highlighted (via Font-Lock).
-
-** Version 0.8.0 from 2026-12-16
-
-- Fix bugs related to automatic abbreviation expansion:
-- Backslash-dot-space now correctly expands to middledot-space, all while the cursor is positioned after the space character.
-- Adjacent abbreviations expand correctly, i.e. backslash-dot-backslash expands the first abbreviation, resulting in middledot-backslash.
-- Two abbreviations have been dropped, namely backslash and plus-space.
-
-** Version 0.7.0 from 2025-12-15
-
-- Remove the ~nael-markdown~ package. Move its code into ~nael~ package instead. (Wrapped into ~with-eval-after-load~.)
-- ~nael~ is now on [[https://melpa.org/#/nael][Melpa]] and [[https://stable.melpa.org/#/nael][Melpa-Stable]]. ~nael-lsp~ is not there yet. (Addendum: ~nael-lsp~ is available on Melpa (and Melpa-Stable) too, since )
-
-** Version 0.6.2 from 2025-11-30
-
-- Re-add readme as .texi and .info to repository because Nael might soon be added to Melpa which won't build Info manuals itself.
-
-** Version 0.6.0 from 2025-11-30
-
-- Remove .texi, .info, and -autoloads.el files from repository. Thus, don't load autoloads-files from other Elisp sources. This makes Nael compatible with package-vc.
-- build.el: Only build files/targets passed as command-line arguments. Valid arguments are abbreviations, autoloads, compile, info and root-readme.
-- dir-locals.el: Remove an assignment of a non-core Emacs variable which lead to Emacs asking for confirmation.
-- README: Provide installation instructions via package-vc-selected-packages and use-package :vc.
-- Add several autoload-cookies. This allows for simpler use-package expressions.
-- README: Add changelog chapter.
-- nael, nael-abbrev:
-  - Rename nael-abbrev-table-only-singletons to nael-abbrev-singleton-table.
-  - Rename nael-abbrev-table-only-skeletons to nael-abbrev-skeleton-table.
+For a more detailed per-file breakdown, consider the copyright header of each file.
 
 * License and Maintenance
 
-Like Nael, Lena is effectively licensed under GNU GPL version 3 only. More
-precisely, the code that comes from Nael is licensed under Apache-2.0 and
-sublicensed under GPL-3.0.
+Lena is effectively licensed under GNU GPL version 3 only. More precisely, the
+code that comes from Nael is licensed under Apache-2.0 and sublicensed under
+GPL-3.0.
 
-The files that Lena adds are licensed under GPL-3.0-only, except
-~lena-rpc.el~. Parts of ~lena-eglot.el~ are adapted from [[https://github.com/d-torrance/lean4-mode][lean4-mode]] under
-Apache-2.0. ~lena-rpc.el~ is derived from lean4-mode and [[https://github.com/janmasrovira/neo-lean-mode][neo-lean-mode]] and
-licensed under the MIT License, see =LICENSE.MIT=. The smartparens pairs and the
-Doom Emacs setup in this manual follow Doom Emacs' =:lang lean= module, under the
-MIT License. The input method is
-generated from data of [[https://github.com/leanprover/vscode-lean4][vscode-lean4]], under Apache-2.0. The test fixtures are
-recorded from [[https://github.com/leanprover-community/iris-lean][iris-lean]], under Apache-2.0. For details, see =NOTICE= and
-=test/fixtures/README.org=.
+The files that Lena adds are licensed under GPL-3.0-only, except ~lena-rpc.el~.
+Parts of ~lena-eglot.el~ are adapted from [[https://github.com/d-torrance/lean4-mode][lean4-mode]] under Apache-2.0.
+~lena-rpc.el~ is derived from lean4-mode and [[https://github.com/janmasrovira/neo-lean-mode][neo-lean-mode]] and licensed under
+the MIT License, see =LICENSE.MIT=. The smartparens pairs and the Doom Emacs
+setup in this manual follow Doom Emacs' =:lang lean= module, under the MIT
+License. The input method is generated from data of [[https://github.com/leanprover/vscode-lean4][vscode-lean4]], under
+Apache-2.0. The test fixtures are recorded from [[https://github.com/leanprover-community/iris-lean][iris-lean]], under Apache-2.0. For
+details, see =NOTICE= and =test/fixtures/README.org=.
 
 Lena is maintained by /Klaus Kraßnitzer/ and /Alex Loitzl/ of ISTA PLV at
 [[https://github.com/ISTA-PLV/lena][github.com/ISTA-PLV/lena]]; please report problems there.
-
-Nael, upstream, is maintained by /Mekeor Melire/ ([[mailto:mekeor@posteo.de][mekeor@posteo.de]]) on [[https://codeberg.org/mekeor/nael][Codeberg]].
