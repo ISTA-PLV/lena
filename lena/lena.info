@@ -243,7 +243,7 @@ autoloads-file needs to be built beforehand.
      ;; (require 'lena-autoloads)
      ;; (require 'lena-evil-autoloads)
 
-     ;; Optionally, make readme available as info manual:
+     ;; Optionally, make the README available as an Info manual:
      (require 'info)
      (info-initialize)
      (add-to-list 'Info-directory-list "~/path/to/lena/lena")
@@ -334,7 +334,7 @@ File: lena.info,  Node: Configuration,  Prev: Install for Doom Emacs,  Up: Insta
 4.3 Configuration
 =================
 
-Below, we highlight some of Lena's user options, for the complete list,
+Below, we highlight some of Lena's user options; for the complete list,
 use ‘M-x customize-group RET lena RET’.
 
    You can bind custom keys in ‘lena-mode-map’:
@@ -366,10 +366,10 @@ scale your chosen characters to the line height.
            lena-margin-emoji-height 1)          ; as tall as text lines
 
    To keep Flymake's indicators instead of the signs, set ‘lena-margin’
-to ‘nil’, before visiting a lean file.
+to ‘nil’, before visiting a Lean file.
 
-   Lena truncates the the trace of Flymake, only showing "(trace)", as
-in VS Code.  To keep the full text in Flymake instead, set
+   Lena truncates the trace of Flymake, only showing "(trace)", as in VS
+Code.  To keep the full text in Flymake instead, set
 ‘lena-eglot-widgets’ to ‘nil’ before Lean starts.
 
    To start Lean buffers with the input method off, set
@@ -384,8 +384,8 @@ File: lena.info,  Node: Contribute,  Next: Credits,  Prev: Install,  Up: Top
 
 We welcome contributions of any kind!  Especially, bug reports and PRs
 addressing open issues.  If you are interested in extending Lena and
-upstreaming changes, please open a feature request as an Issue on
-Github.  For more details, see CONTRIBUTING.org
+upstreaming changes, please open a feature request as an issue on
+GitHub.  For more details, see CONTRIBUTING.org
 (https://github.com/ISTA-PLV/lena/blob/main/CONTRIBUTING.org).
 
 * Menu:
@@ -430,8 +430,8 @@ provide the experience it does now.  In particular,
    • the test fixtures are from iris-lean
      (https://github.com/leanprover-community/iris-lean)
 
-   For a more detailed per-file breakdown, consider the copyright header
-of each file.
+   For a more detailed per-file breakdown, see the copyright header of
+each file.
 
 
 File: lena.info,  Node: License and Maintenance,  Prev: Credits,  Up: Top
@@ -473,14 +473,14 @@ Node: With Evil6071
 Node: Install6804
 Node: Install from Source7089
 Node: Manual7283
-Node: Installation via package-vc8195
-Node: Install for Doom Emacs9097
-Node: Configuration11511
-Node: Flymake and Margin12070
-Node: Contribute13176
-Node: Reporting Problems13634
-Node: Credits14250
-Node: License and Maintenance15254
+Node: Installation via package-vc8202
+Node: Install for Doom Emacs9104
+Node: Configuration11518
+Node: Flymake and Margin12077
+Node: Contribute13179
+Node: Reporting Problems13637
+Node: Credits14253
+Node: License and Maintenance15252
 
 End Tag Table
 
