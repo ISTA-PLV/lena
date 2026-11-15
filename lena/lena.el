@@ -476,6 +476,81 @@ with the input method on, and \\[toggle-input-method] turns it off."
 
 (add-hook 'minibuffer-setup-hook #'lena-quail-minibuffer-setup)
 
+;;;; Indentation:
+
+(defcustom lena-indent-offset 2
+  "Columns a block is indented relative to the line opening it."
+  :safe #'integerp
+  :type 'integer
+  :group 'lena)
+
+(defconst lena-indent--opener-regexp
+  (rx (or (seq symbol-start
+               (or "by" "do" "then" "else" "where" "with" "calc" "from"
+                   "fun" "in"))
+          ":=" "=>" "<|" "$" "(" "[" "{" "⟨" ",")
+      (* blank) eos)
+  "Matches the end of a line that opens a block.
+The next line is indented by `lena-indent-offset' relative to it.")
+
+(defconst lena-indent--bullet-regexp
+  (rx bos (* blank) "·" (+ blank))
+  "Matches the start of a line with a tactic bullet.
+The next line is indented to the column after the bullet.")
+
+(defun lena-indent--line-string ()
+  "Return the current line without a trailing line comment or blanks."
+  (let ((line (buffer-substring-no-properties (line-beginning-position)
+                                              (line-end-position))))
+    (string-trim-right (replace-regexp-in-string "--.*\\'" "" line))))
+
+(defun lena-indent--target ()
+  "Return the column to indent the current line to.
+It is that of the previous line, further by `lena-indent-offset' when
+that line opens a block, see `lena-indent--opener-regexp', or that of
+the text after a bullet, see `lena-indent--bullet-regexp'.  After a
+blank line, or at the start of the buffer, it is 0: that is where a
+declaration starts."
+  (save-excursion
+    (if (or (not (zerop (forward-line -1)))
+            (looking-at-p "[[:blank:]]*$"))
+        0
+      (let ((indentation (current-indentation))
+            (text (lena-indent--line-string)))
+        (cond ((string-match-p lena-indent--opener-regexp text)
+               (+ indentation lena-indent-offset))
+              ((string-match lena-indent--bullet-regexp text)
+               (match-end 0))
+              (t indentation))))))
+
+(defun lena-indent--set (column)
+  "Indent the current line to COLUMN, at least 0.
+Point stays where it is in the text, or moves to the indentation."
+  (if (<= (current-column) (current-indentation))
+      (indent-line-to (max column 0))
+    (save-excursion (indent-line-to (max column 0)))))
+
+(defun lena-indent-line ()
+  "Indent the current line like the previous one, or deeper after a block.
+`indent-line-function' for `lena-mode', see `lena-indent--target'.
+On \\<lena-mode-map>\\[indent-for-tab-command], a line that is there already goes one level deeper, that
+is by `lena-indent-offset'.  Dedent with \\[lena-indent-dedent].  Lena cannot
+tell where a block ends, so it does not dedent by itself."
+  (let ((target (lena-indent--target)))
+    (cond ((/= (current-indentation) target)
+           (lena-indent--set target))
+          ((and (eq this-command 'indent-for-tab-command)
+                (<= (current-column) (current-indentation)))
+           (lena-indent--set (+ (current-indentation) lena-indent-offset)))
+          ;; Leave the line alone, so that `indent-for-tab-command'
+          ;; may complete when `tab-always-indent' is `complete'.
+          (t nil))))
+
+(defun lena-indent-dedent ()
+  "Dedent the current line by `lena-indent-offset'."
+  (interactive)
+  (lena-indent--set (- (current-indentation) lena-indent-offset)))
+
 ;;;; Mode:
 
 (defcustom lena-mode-hook nil
@@ -489,7 +564,8 @@ with the input method on, and \\[toggle-input-method] turns it off."
   "C-c C-c" #'project-compile
   "C-c C-e" #'eglot
   "C-c C-i" #'lena-infoview
-  "C-c C-r" #'lena-eglot-restart-file)
+  "C-c C-r" #'lena-eglot-restart-file
+  "<backtab>" #'lena-indent-dedent)
 
 ;;;###autoload
 (define-derived-mode lena-mode prog-mode "Lena"
@@ -506,6 +582,18 @@ with the input method on, and \\[toggle-input-method] turns it off."
               #'lena-navigation-defun-beginning)
   (setq-local end-of-defun-function
               #'lena-navigation-defun-end)
+  ;; Indentation:
+  (setq-local indent-line-function
+              #'lena-indent-line)
+  (setq-local indent-tabs-mode
+              nil)
+  ;; RET indents the new line, but does not reindent the finished one:
+  ;; that would undo a dedent, as Lena cannot tell where a block ends.
+  (setq-local electric-indent-inhibit
+              t)
+  ;; For the same reason, reindenting a region would flatten it.
+  (setq-local indent-region-function
+              #'ignore)
   ;; Paragraphs and filling:
   (setq-local paragraph-start
               "[[:blank:]]*$")
