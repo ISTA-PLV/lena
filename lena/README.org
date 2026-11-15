@@ -259,6 +259,15 @@ To start Lean buffers with the input method off, set ~lena-activate-quail~ to
 =nil=; =C-\= still turns it on. To keep your global default input method
 instead, set ~lena-prepare-quail~ to =nil=.
 
+*** Performance
+
+In case you experience performance issues, raise the delay after which Lena
+requests an update from the LSP after the point moves:
+  #+begin_src emacs-lisp
+  (setq lena-infoview-delay 0.1
+        lena-eldoc-idle-delay 0.1)
+  #+end_src
+
 * Contribute
 
 We welcome contributions of any kind! Especially, bug reports and PRs addressing
