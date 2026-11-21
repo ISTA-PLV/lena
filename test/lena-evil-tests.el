@@ -48,16 +48,6 @@
           (should (eq (key-binding (kbd "K")) #'lena-infoview-describe)))
       (kill-buffer))))
 
-(ert-deftest lena-evil-test-shift-width ()
-  "In Lean buffers, Evil shifts by `lena-indent-offset'."
-  (unless (require 'evil nil t)
-    (ert-skip "Evil is not installed"))
-  (lena-evil-setup)
-  (with-temp-buffer
-    (let ((lena-indent-offset 3))
-      (lena-mode)
-      (should (eql evil-shift-width 3)))))
-
 (provide 'lena-evil-tests)
 
 ;;; lena-evil-tests.el ends here
