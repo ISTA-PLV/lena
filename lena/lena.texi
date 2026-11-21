@@ -68,6 +68,7 @@ Install from Source
 Configuration
 
 * Flymake and Margin::
+* Performance::
 
 Contribute
 
@@ -101,7 +102,34 @@ Contribute
 @node Features
 @chapter Features
 
-Collection of gifs to show off the features (We can also do a list for now)
+@itemize
+@item
+Infoview that displays error messages and expected type
+@item
+[Semantic Highlighting](@uref{https://lean-lang.org/documentation/semantic-tokens})
+@item
+Press @samp{C-c C-r} to restart the file@comma{} rebuilding the dependencies
+@item
+Unicode input method@comma{} e.g.@comma{} type @samp{\a} for @samp{α}
+@end itemize
+@uref{https://github.com/user-attachments/assets/b9aca499-5ded-4bf2-9695-7b5a9ca4bcae#.gif}
+@itemize
+@item
+Margin Signs to mark errors@comma{} warnings and finished proofs
+@end itemize
+@uref{https://github.com/user-attachments/assets/bd9e540f-59d4-4d63-a99b-f76083e904f1#.gif}
+@itemize
+@item
+Recursive documentation
+@end itemize
+@uref{https://github.com/user-attachments/assets/ca5f48a9-e0ff-42b9-8183-4c8b86e4abea#.gif}
+@itemize
+@item
+Highlights of changed terms for each proof step in infoview
+@item
+`[apply]` suggestions in the infoview
+@end itemize
+@uref{https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif }
 
 @node Usage
 @chapter Usage
@@ -396,6 +424,7 @@ To automatically enable features (e.g. Eglot) when Lena is started@comma{} custo
 
 @menu
 * Flymake and Margin::
+* Performance::
 @end menu
 
 @node Flymake and Margin
@@ -422,6 +451,16 @@ before Lean starts.
 To start Lean buffers with the input method off@comma{} set @code{lena-activate-quail} to
 @samp{nil}; @samp{C-\} still turns it on. To keep your global default input method
 instead@comma{} set @code{lena-prepare-quail} to @samp{nil}.
+
+@node Performance
+@subsection Performance
+
+In case you experience performance issues@comma{} raise the delay after which Lena
+requests an update from the LSP after the point moves:
+@lisp
+(setq lena-infoview-delay 0.1
+      lena-eldoc-idle-delay 0.1)
+@end lisp
 
 @node Contribute
 @chapter Contribute
