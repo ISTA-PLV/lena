@@ -43,8 +43,8 @@ assistants and reviewed, tested and revised by Lena's maintainers.
 [[https://github.com/user-attachments/assets/ca5f48a9-e0ff-42b9-8183-4c8b86e4abea#.gif]]
 - Highlights of changed terms for each proof step in infoview
 - `[apply]` suggestions in the infoview
-[[https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif
-]]
+[[https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif]]
+
 * Usage
 
 ** In Lean Buffer

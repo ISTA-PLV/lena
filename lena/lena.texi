@@ -129,7 +129,7 @@ Highlights of changed terms for each proof step in infoview
 @item
 `[apply]` suggestions in the infoview
 @end itemize
-@uref{https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif }
+@uref{https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif}
 
 @node Usage
 @chapter Usage
