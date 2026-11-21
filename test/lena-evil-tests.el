@@ -48,6 +48,19 @@
           (should (eq (key-binding (kbd "K")) #'lena-infoview-describe)))
       (kill-buffer))))
 
+(ert-deftest lena-evil-test-shift-width ()
+  "`<' and `>' shift by `lena-indent-offset', even from directory variables."
+  (unless (require 'evil nil t)
+    (ert-skip "Evil is not installed"))
+  (lena-evil-setup)
+  (with-temp-buffer
+    (lena-mode)
+    (should (= evil-shift-width 2))
+    ;; As `hack-local-variables' does for a directory variable.
+    (setq-local lena-indent-offset 4)
+    (run-hooks 'hack-local-variables-hook)
+    (should (= evil-shift-width 4))))
+
 (provide 'lena-evil-tests)
 
 ;;; lena-evil-tests.el ends here
