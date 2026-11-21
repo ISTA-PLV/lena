@@ -40,14 +40,24 @@
 
 ;;; Code:
 
+(require 'lena)
 (require 'lena-infoview)
 
 (declare-function evil-define-key* "evil-core")
+(defvar evil-shift-width)
+
+(defun lena-evil-shift-width ()
+  "Make Evil's `<' and `>' shift by `lena-indent-offset'.
+Set it again once directory and file variables are applied, since
+they may change `lena-indent-offset' after `lena-mode-hook' has run."
+  (setq-local evil-shift-width lena-indent-offset)
+  (add-hook 'hack-local-variables-hook #'lena-evil-shift-width nil t))
 
 ;;;###autoload
 (defun lena-evil-setup ()
   "Bind keys for Evil in Lena's infoview and its help buffer."
   (require 'evil)
+  (add-hook 'lena-mode-hook #'lena-evil-shift-width)
   (evil-define-key* '(normal motion) lena-infoview-mode-map
     "]g" #'lena-infoview-next-goal
     "[g" #'lena-infoview-previous-goal

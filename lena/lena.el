@@ -476,6 +476,22 @@ with the input method on, and \\[toggle-input-method] turns it off."
 
 (add-hook 'minibuffer-setup-hook #'lena-quail-minibuffer-setup)
 
+;;;; Indentation
+
+(defcustom lena-indent-offset 2
+  "Columns a block is indented by."
+  :safe #'integerp
+  :type 'integer
+  :group 'lena)
+
+(defun lena-indent-line ()
+  "Indent to the next multiple of `lena-indent-offset'.
+In the left margin indentation, indent the line; otw insert spaces."
+  (when (<= (current-column) (current-indentation))
+    (back-to-indentation))
+  (let ((tab-stop-list (list 0 lena-indent-offset)))
+    (tab-to-tab-stop)))
+
 ;;;; Mode:
 
 (defcustom lena-mode-hook nil
@@ -506,6 +522,17 @@ with the input method on, and \\[toggle-input-method] turns it off."
               #'lena-navigation-defun-beginning)
   (setq-local end-of-defun-function
               #'lena-navigation-defun-end)
+  ;; Indentation:
+  (setq-local indent-tabs-mode
+              nil)
+  (setq-local indent-line-function
+              #'lena-indent-line)
+  (setq-local indent-line-ignored-functions
+              (cons #'lena-indent-line indent-line-ignored-functions))
+  (setq-local indent-region-function
+              #'ignore)
+  (setq-local electric-indent-inhibit
+              t)
   ;; Paragraphs and filling:
   (setq-local paragraph-start
               "[[:blank:]]*$")
