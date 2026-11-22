@@ -59,7 +59,6 @@ Install from Source
 Configuration
 
 * Flymake and Margin::
-* Performance::
 
 Contribute
 
@@ -85,7 +84,7 @@ File: lena.info,  Node: Features,  Next: Usage,  Prev: Table of Contents,  Up: T
 2 Features
 **********
 
-   • Infoview that displays error messages and expected type
+   • Infoview that displays error messages, goals, and the expected type
    • [Semantic
      Highlighting](<https://lean-lang.org/documentation/semantic-tokens>)
    • Press ‘C-c C-r’ to restart the file, rebuilding the dependencies
@@ -159,10 +158,9 @@ Key                         Command                    Effect
 ‘RET’, ‘mouse-1’, ‘C-h .’   ‘lena-infoview-describe’   Describe it in ‘*Lena Help*’: explicit form, type, docs
 ‘M-.’ / ‘M-,’               ‘xref-find-definitions’    Go to its definition / come back
 
-   Hovering a subterm shows its explicit form and type with ElDoc (in a
-popup with eldoc-box (https://github.com/casouri/eldoc-box)) and, with
-‘tooltip-mode’, in a tooltip; setting ‘use-system-tooltips’ to ‘nil’
-formats these better.  In ‘*Lena Help*’, ‘l’ and ‘r’ go back and forth.
+   With point on a subterm, ElDoc shows its explicit form and type (in a
+popup with eldoc-box (https://github.com/casouri/eldoc-box)).  With
+‘tooltip-mode’, hovering it with the mouse shows them in a tooltip.
 
 
 File: lena.info,  Node: Signs in the Margin,  Next: With Evil,  Prev: In the Infoview,  Up: Usage
@@ -361,17 +359,17 @@ customize ‘lena-mode-hook’ as follows:
 * Menu:
 
 * Flymake and Margin::
-* Performance::
 
 
-File: lena.info,  Node: Flymake and Margin,  Next: Performance,  Up: Configuration
+File: lena.info,  Node: Flymake and Margin,  Up: Configuration
 
 4.3.1 Flymake and Margin
 ------------------------
 
 The signs in the margin can be changed, for example, with chickens
-below.  Play around with the value for ‘lena-margin-emoji-height’ to
-scale your chosen characters to the line height.
+below.  You may have to play around with the value for
+‘lena-margin-emoji-height’ to scale your chosen characters to the line
+height depending on your font.
 
      (setq lena-margin-goals-accomplished "🐣"  ; complete proof
            lena-margin-unsolved-goals "🥚"      ; unsolved goals
@@ -388,17 +386,6 @@ Code.  To keep the full text in Flymake instead, set
    To start Lean buffers with the input method off, set
 ‘lena-activate-quail’ to ‘nil’; ‘C-\’ still turns it on.  To keep your
 global default input method instead, set ‘lena-prepare-quail’ to ‘nil’.
-
-
-File: lena.info,  Node: Performance,  Prev: Flymake and Margin,  Up: Configuration
-
-4.3.2 Performance
------------------
-
-In case you experience performance issues, raise the delay after which
-Lena requests an update from the LSP after the point moves:
-     (setq lena-infoview-delay 0.1
-           lena-eldoc-idle-delay 0.1)
 
 
 File: lena.info,  Node: Contribute,  Next: Credits,  Prev: Install,  Up: Top
@@ -442,10 +429,10 @@ File: lena.info,  Node: Credits,  Next: License and Maintenance,  Prev: Contribu
 Lena builds on the ideas and code of many other projects in order to
 provide the experience it does now.  In particular,
    • Lena is forked off Nael (https://codeberg.org/mekeor/nael),
-   • dependency management and ‘lena-rpc.el’ are adapted from Doug
-     Torrance's lean4-mode (https://github.com/d-torrance/lean4-mode),
-     and _Jan Mas Rovira_'s neo-lean-mode
-     (https://github.com/janmasrovira/neo-lean-mode),
+   • Dependency management is adapted from Doug Torrance's lean4-mode
+     (https://github.com/d-torrance/lean4-mode), and ‘lena-rpc.el’ from
+     both lean4-mode and _Jan Mas Rovira_'s neo-lean-mode
+     (https://github.com/janmasrovira/neo-lean-mode).
    • Lena's input method is generated from vscode-lean4
      (https://github.com/leanprover/vscode-lean4),
    • the infoview is modelled after lean.nvim
@@ -487,25 +474,24 @@ please report problems there.
 
 Tag Table:
 Node: Top192
-Node: Table of Contents1454
-Node: Features1844
-Node: Usage2814
-Node: In Lean Buffer2994
-Node: In the Infoview4208
-Node: Signs in the Margin6116
-Node: With Evil6871
-Node: Install7604
-Node: Install from Source7889
-Node: Manual8083
-Node: Installation via package-vc9002
-Node: Install for Doom Emacs9904
-Node: Configuration12318
-Node: Flymake and Margin12893
-Node: Performance14015
-Node: Contribute14343
-Node: Reporting Problems14801
-Node: Credits15417
-Node: License and Maintenance16416
+Node: Table of Contents1438
+Node: Features1828
+Node: Usage2810
+Node: In Lean Buffer2990
+Node: In the Infoview4204
+Node: Signs in the Margin6017
+Node: With Evil6772
+Node: Install7505
+Node: Install from Source7790
+Node: Manual7984
+Node: Installation via package-vc8903
+Node: Install for Doom Emacs9805
+Node: Configuration12219
+Node: Flymake and Margin12778
+Node: Contribute13919
+Node: Reporting Problems14377
+Node: Credits14993
+Node: License and Maintenance16012
 
 End Tag Table
 
