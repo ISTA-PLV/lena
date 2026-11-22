@@ -28,7 +28,7 @@ assistants and reviewed, tested and revised by Lena's maintainers.
 
 * Features
 
-- Infoview that displays error messages and expected type
+- Infoview that displays error messages, goals, and the expected type
 - [Semantic Highlighting](https://lean-lang.org/documentation/semantic-tokens)
 - Press =C-c C-r= to restart the file, rebuilding the dependencies
 - Unicode input method, e.g., type =\a= for =α=
@@ -81,9 +81,8 @@ On a subterm of a goal:
 | =RET=, =mouse-1=, =C-h .= | ~lena-infoview-describe~ | Describe it in =*Lena Help*=: explicit form, type, docs |
 | =M-.= / =M-,=             | ~xref-find-definitions~  | Go to its definition / come back                        |
 
-Hovering a subterm shows its explicit form and type with ElDoc (in a popup with
-[[https://github.com/casouri/eldoc-box][eldoc-box]]) and, with ~tooltip-mode~, in a tooltip; setting ~use-system-tooltips~
-to =nil= formats these better. In =*Lena Help*=, =l= and =r= go back and forth.
+With point on a subterm, ElDoc shows its explicit form and type (in a popup with
+[[https://github.com/casouri/eldoc-box][eldoc-box]]). With ~tooltip-mode~, hovering it with the mouse shows them in a tooltip.
 
 ** Signs in the Margin
 
@@ -247,9 +246,9 @@ To automatically enable features (e.g. Eglot) when Lena is started, customize
 
 *** Flymake and Margin
 
-The signs in the margin can be changed, for example, with chickens below. Play
-around with the value for ~lena-margin-emoji-height~ to scale your chosen
-characters to the line height.
+The signs in the margin can be changed, for example, with chickens below. You
+may have to play around with the value for ~lena-margin-emoji-height~ to scale
+your chosen characters to the line height depending on your font.
 
 #+begin_src emacs-lisp
 (setq lena-margin-goals-accomplished "🐣"  ; complete proof
@@ -268,15 +267,6 @@ before Lean starts.
 To start Lean buffers with the input method off, set ~lena-activate-quail~ to
 =nil=; =C-\= still turns it on. To keep your global default input method
 instead, set ~lena-prepare-quail~ to =nil=.
-
-*** Performance
-
-In case you experience performance issues, raise the delay after which Lena
-requests an update from the LSP after the point moves:
-  #+begin_src emacs-lisp
-  (setq lena-infoview-delay 0.1
-        lena-eldoc-idle-delay 0.1)
-  #+end_src
 
 * Contribute
 
@@ -304,8 +294,8 @@ before sharing it.
 
 Lena builds on the ideas and code of many other projects in order to provide the experience it does now. In particular,
 - Lena is forked off [[https://codeberg.org/mekeor/nael][Nael]],
-- dependency management and =lena-rpc.el= are adapted from Doug Torrance's
-  [[https://github.com/d-torrance/lean4-mode][lean4-mode]], and /Jan Mas Rovira/'s [[https://github.com/janmasrovira/neo-lean-mode][neo-lean-mode]],
+- Dependency management is adapted from Doug Torrance's [[https://github.com/d-torrance/lean4-mode][lean4-mode]],
+  and =lena-rpc.el= from both lean4-mode and /Jan Mas Rovira/'s [[https://github.com/janmasrovira/neo-lean-mode][neo-lean-mode]].
 - Lena's input method is generated from [[https://github.com/leanprover/vscode-lean4][vscode-lean4]],
 - the infoview is modelled after [[https://github.com/Julian/lean.nvim][lean.nvim]], and [[https://github.com/leanprover/vscode-lean4][vscode-lean4]],
 - the test fixtures are from [[https://github.com/leanprover-community/iris-lean][iris-lean]]

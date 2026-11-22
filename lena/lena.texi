@@ -68,7 +68,6 @@ Install from Source
 Configuration
 
 * Flymake and Margin::
-* Performance::
 
 Contribute
 
@@ -104,7 +103,7 @@ Contribute
 
 @itemize
 @item
-Infoview that displays error messages and expected type
+Infoview that displays error messages@comma{} goals@comma{} and the expected type
 @item
 [Semantic Highlighting](@uref{https://lean-lang.org/documentation/semantic-tokens})
 @item
@@ -222,9 +221,8 @@ On a subterm of a goal:
 @tab Go to its definition / come back
 @end multitable
 
-Hovering a subterm shows its explicit form and type with ElDoc (in a popup with
-@uref{https://github.com/casouri/eldoc-box, eldoc-box}) and@comma{} with @code{tooltip-mode}@comma{} in a tooltip; setting @code{use-system-tooltips}
-to @samp{nil} formats these better. In @samp{*Lena Help*}@comma{} @samp{l} and @samp{r} go back and forth.
+With point on a subterm@comma{} ElDoc shows its explicit form and type (in a popup with
+@uref{https://github.com/casouri/eldoc-box, eldoc-box}). With @code{tooltip-mode}@comma{} hovering it with the mouse shows them in a tooltip.
 
 @node Signs in the Margin
 @section Signs in the Margin
@@ -424,15 +422,14 @@ To automatically enable features (e.g. Eglot) when Lena is started@comma{} custo
 
 @menu
 * Flymake and Margin::
-* Performance::
 @end menu
 
 @node Flymake and Margin
 @subsection Flymake and Margin
 
-The signs in the margin can be changed@comma{} for example@comma{} with chickens below. Play
-around with the value for @code{lena-margin-emoji-height} to scale your chosen
-characters to the line height.
+The signs in the margin can be changed@comma{} for example@comma{} with chickens below. You
+may have to play around with the value for @code{lena-margin-emoji-height} to scale
+your chosen characters to the line height depending on your font.
 
 @lisp
 (setq lena-margin-goals-accomplished "🐣"  ; complete proof
@@ -451,16 +448,6 @@ before Lean starts.
 To start Lean buffers with the input method off@comma{} set @code{lena-activate-quail} to
 @samp{nil}; @samp{C-\} still turns it on. To keep your global default input method
 instead@comma{} set @code{lena-prepare-quail} to @samp{nil}.
-
-@node Performance
-@subsection Performance
-
-In case you experience performance issues@comma{} raise the delay after which Lena
-requests an update from the LSP after the point moves:
-@lisp
-(setq lena-infoview-delay 0.1
-      lena-eldoc-idle-delay 0.1)
-@end lisp
 
 @node Contribute
 @chapter Contribute
@@ -498,8 +485,8 @@ Lena builds on the ideas and code of many other projects in order to provide the
 @item
 Lena is forked off @uref{https://codeberg.org/mekeor/nael, Nael}@comma{}
 @item
-dependency management and @samp{lena-rpc.el} are adapted from Doug Torrance's
-@uref{https://github.com/d-torrance/lean4-mode, lean4-mode}@comma{} and @emph{Jan Mas Rovira}'s @uref{https://github.com/janmasrovira/neo-lean-mode, neo-lean-mode}@comma{}
+Dependency management is adapted from Doug Torrance's @uref{https://github.com/d-torrance/lean4-mode, lean4-mode}@comma{}
+and @samp{lena-rpc.el} from both lean4-mode and @emph{Jan Mas Rovira}'s @uref{https://github.com/janmasrovira/neo-lean-mode, neo-lean-mode}.
 @item
 Lena's input method is generated from @uref{https://github.com/leanprover/vscode-lean4, vscode-lean4}@comma{}
 @item
