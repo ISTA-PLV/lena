@@ -105,30 +105,24 @@ Contribute
 @item
 Infoview that displays error messages@comma{} goals@comma{} and the expected type
 @item
-[Semantic Highlighting](@uref{https://lean-lang.org/documentation/semantic-tokens})
+@uref{https://lean-lang.org/documentation/semantic-tokens, Semantic Highlighting}
 @item
 Press @samp{C-c C-r} to restart the file@comma{} rebuilding the dependencies
 @item
 Unicode input method@comma{} e.g.@comma{} type @samp{\a} for @samp{α}
-@end itemize
 @uref{https://github.com/user-attachments/assets/b9aca499-5ded-4bf2-9695-7b5a9ca4bcae#.gif}
-@itemize
 @item
 Margin Signs to mark errors@comma{} warnings and finished proofs
-@end itemize
 @uref{https://github.com/user-attachments/assets/bd9e540f-59d4-4d63-a99b-f76083e904f1#.gif}
-@itemize
 @item
 Recursive documentation
-@end itemize
 @uref{https://github.com/user-attachments/assets/ca5f48a9-e0ff-42b9-8183-4c8b86e4abea#.gif}
-@itemize
 @item
 Highlights of changed terms for each proof step in infoview
 @item
-`[apply]` suggestions in the infoview
-@end itemize
+@samp{[apply]} suggestions in the infoview
 @uref{https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif}
+@end itemize
 
 @node Usage
 @chapter Usage
@@ -363,8 +357,8 @@ Doom's own @samp{:lang lean} module uses upstream Nael@comma{} so disable it: in
            :files ("lena-evil/*.el" "lena-evil/LICENSE")))
 @end lisp
 
-Set it up in @samp{~/.doom.d/config.el}@comma{} with its keys under the local leader @samp{SPC
-m}@comma{} then run @samp{doom sync} and restart Emacs:
+Set it up in @samp{~/.doom.d/config.el}@comma{} with its keys under the local leader
+@samp{SPC m}@comma{} then run @samp{doom sync} and restart Emacs:
 
 @lisp
 ;; Lean's Unicode input@comma{} such as \to for →@comma{} is on in Lean buffers; C-\

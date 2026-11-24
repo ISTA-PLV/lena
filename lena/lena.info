@@ -85,18 +85,18 @@ File: lena.info,  Node: Features,  Next: Usage,  Prev: Table of Contents,  Up: T
 **********
 
    • Infoview that displays error messages, goals, and the expected type
-   • [Semantic
-     Highlighting](<https://lean-lang.org/documentation/semantic-tokens>)
+   • Semantic Highlighting
+     (https://lean-lang.org/documentation/semantic-tokens)
    • Press ‘C-c C-r’ to restart the file, rebuilding the dependencies
    • Unicode input method, e.g., type ‘\a’ for ‘α’
-   <https://github.com/user-attachments/assets/b9aca499-5ded-4bf2-9695-7b5a9ca4bcae#.gif>
+     <https://github.com/user-attachments/assets/b9aca499-5ded-4bf2-9695-7b5a9ca4bcae#.gif>
    • Margin Signs to mark errors, warnings and finished proofs
-   <https://github.com/user-attachments/assets/bd9e540f-59d4-4d63-a99b-f76083e904f1#.gif>
+     <https://github.com/user-attachments/assets/bd9e540f-59d4-4d63-a99b-f76083e904f1#.gif>
    • Recursive documentation
-   <https://github.com/user-attachments/assets/ca5f48a9-e0ff-42b9-8183-4c8b86e4abea#.gif>
+     <https://github.com/user-attachments/assets/ca5f48a9-e0ff-42b9-8183-4c8b86e4abea#.gif>
    • Highlights of changed terms for each proof step in infoview
-   • '[apply]' suggestions in the infoview
-   <https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif>
+   • ‘[apply]’ suggestions in the infoview
+     <https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif>
 
 
 File: lena.info,  Node: Usage,  Next: Install,  Prev: Features,  Up: Top
@@ -476,22 +476,22 @@ Tag Table:
 Node: Top192
 Node: Table of Contents1438
 Node: Features1828
-Node: Usage2810
-Node: In Lean Buffer2990
-Node: In the Infoview4204
-Node: Signs in the Margin6017
-Node: With Evil6772
-Node: Install7505
-Node: Install from Source7790
-Node: Manual7984
-Node: Installation via package-vc8903
-Node: Install for Doom Emacs9805
-Node: Configuration12219
-Node: Flymake and Margin12778
-Node: Contribute13919
-Node: Reporting Problems14377
-Node: Credits14993
-Node: License and Maintenance16012
+Node: Usage2819
+Node: In Lean Buffer2999
+Node: In the Infoview4213
+Node: Signs in the Margin6026
+Node: With Evil6781
+Node: Install7514
+Node: Install from Source7799
+Node: Manual7993
+Node: Installation via package-vc8912
+Node: Install for Doom Emacs9814
+Node: Configuration12228
+Node: Flymake and Margin12787
+Node: Contribute13928
+Node: Reporting Problems14386
+Node: Credits15002
+Node: License and Maintenance16021
 
 End Tag Table
 
