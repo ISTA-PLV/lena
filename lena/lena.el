@@ -297,6 +297,14 @@
   ;; comment's starter including its padding, therefore trim.
   (insert (string-trim-right comment-start) " "))
 
+(defun lena-comment-indent ()
+  "Indent a new comment line like the line above it.
+`comment-indent-new-line' would otherwise start at column 0 for a
+comment that is indented with its code."
+  (save-excursion
+    (forward-line -1)
+    (current-indentation)))
+
 (defun lena-fill-paragraph (&optional justify)
   "Fill comment paragraph at point.  Maybe JUSTIFY."
   (interactive)
@@ -547,6 +555,8 @@ In the left margin indentation, indent the line; otw insert spaces."
               "[[:space:]]*\\(?:-/\\|\\s>\\)")
   (setq-local comment-insert-comment-function
               #'lena-comment-insert)
+  (setq-local comment-indent-function
+              #'lena-comment-indent)
   (setq-local comment-padding
               1)
   (setq-local comment-quote-nested ;; Comments may be nested.

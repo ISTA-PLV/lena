@@ -34,6 +34,15 @@
 
 ;;;; Comments:
 
+(ert-deftest lena-test-comment-newline-keeps-indentation ()
+  "RET inside an indented comment starts the next comment at the same column."
+  (with-temp-buffer
+    (lena-mode)
+    (insert "  -- first line")
+    (goto-char (point-max))
+    (comment-indent-new-line)
+    (should (= (current-indentation) 2))))
+
 (ert-deftest lena-test-comment-region ()
   "Regions are commented out with --, and uncommented line by line."
   (with-temp-buffer
