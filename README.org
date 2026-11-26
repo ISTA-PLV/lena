@@ -13,24 +13,27 @@
 
 Lena is a set of packages that extend [[https://www.gnu.org/software/emacs/][GNU Emacs]] for the [[https://lean-lang.org][Lean]] language. It is
 based off [[https://codeberg.org/mekeor/nael][Nael]] additionally providing an infoview, signs in the margin and more.
-See [[*Credits][Credits]] for more information about Lena's lineage.
+See [[#credits][Credits]] for more information about Lena's lineage.
 
 Lena is not on Elpa or Melpa yet. To install Lena, use ~package-vc~ or a clone of
-this repository, see [[*Install][Install]] for detailed instructions.
+this repository, see [[#install][Install]] for detailed instructions.
 
 *Note*: Much of the code that Lena adds to Nael was written with the help of AI
 assistants and reviewed, tested and revised by Lena's maintainers.
 
 * Table of Contents
-- [[*Features][Features]]
-- [[*Usage][Usage]]
-- [[*Install][Install]]
-- [[*Contribute][Contribute]]
-  + [[*Reporting Problems][Reporting Problems]]
-- [[*Credits][Credits]]
-- [[*License and Maintenance][License]]
+- [[#features][Features]]
+- [[#usage][Usage]]
+- [[#install][Install]]
+- [[#contribute][Contribute]]
+  + [[#reporting-problems][Reporting Problems]]
+- [[#credits][Credits]]
+- [[#license-and-maintenance][License]]
 
 * Features
+:PROPERTIES:
+:CUSTOM_ID: features
+:END:
 
 - Infoview that displays error messages, goals, and the expected type
 - [[https://lean-lang.org/documentation/semantic-tokens][Semantic Highlighting]]
@@ -46,6 +49,9 @@ assistants and reviewed, tested and revised by Lena's maintainers.
   [[https://github.com/user-attachments/assets/9df0f10d-f3d2-44e9-9581-9d17436540a8#.gif]]
 
 * Usage
+:PROPERTIES:
+:CUSTOM_ID: usage
+:END:
 
 ** In Lean Buffer
 
@@ -121,6 +127,9 @@ In =*Lena Help*=, =C-o= and =C-i= go back and forth. In Doom Emacs, =K=, =gd= an
 =C-o= describe, go to a definition, and come back.
 
 * Install
+:PROPERTIES:
+:CUSTOM_ID: install
+:END:
 
 Lena's LSP-based features require Lean version 4 to be [[https://lean-lang.org/install/manual/][installed]].
 
@@ -274,6 +283,9 @@ To start Lean buffers with the input method off, set ~lena-activate-quail~ to
 instead, set ~lena-prepare-quail~ to =nil=.
 
 * Contribute
+:PROPERTIES:
+:CUSTOM_ID: contribute
+:END:
 
 We welcome contributions of any kind! Especially, bug reports and PRs addressing
 open issues. If you are interested in extending Lena and upstreaming changes,
@@ -281,6 +293,9 @@ please open a feature request as an issue on GitHub. For more details, see
 [[https://github.com/ISTA-PLV/lena/blob/main/CONTRIBUTING.org][CONTRIBUTING.org]].
 
 ** Reporting Problems
+:PROPERTIES:
+:CUSTOM_ID: reporting-problems
+:END:
 
 When something looks wrong, =M-x lena-snapshot= records the state of Lena, Eglot
 and Lean under ~lena-snapshot-directory~; call it before restarting anything. Its
@@ -296,6 +311,9 @@ A snapshot contains your file and the others that the server opened; check it
 before sharing it.
 
 * Credits
+:PROPERTIES:
+:CUSTOM_ID: credits
+:END:
 
 Lena builds on the ideas and code of many other projects in order to provide the experience it does now. In particular,
 - Lena is forked off [[https://codeberg.org/mekeor/nael][Nael]],
@@ -308,6 +326,9 @@ Lena builds on the ideas and code of many other projects in order to provide the
 For a more detailed per-file breakdown, see the copyright header of each file.
 
 * License and Maintenance
+:PROPERTIES:
+:CUSTOM_ID: license-and-maintenance
+:END:
 
 Lena is effectively licensed under GNU GPL version 3 only. More precisely, the
 code that comes from Nael is licensed under Apache-2.0 and sublicensed under
